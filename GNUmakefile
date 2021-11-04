@@ -330,7 +330,7 @@ endif
 #######################
 .PHONY: install
 install: init
-	bash -c './install.sh $(TRIPLET)'
+	bash -c 'TRIPLET=$(TRIPLET) services=bitcoind,docs,lnd,rtl,thunderhub,tor ./install.sh'
 	#bash -c 'make btcd'
 #######################
 .PHONY: uninstall
