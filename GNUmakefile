@@ -17,7 +17,11 @@ ifeq ($(ARCH),arm64)
 TRIPLET                                 :=aarch64-linux-gnu
 export TRIPLET
 endif
-
+ifeq ($(services),)
+SERVICES								:=bitcoind,lnd,thunderhub,rtl,docs
+else
+SERVICES								:=$(services)
+endif
 ifeq ($(user),)
 HOST_USER								:= root
 HOST_UID								:= $(strip $(if $(uid),$(uid),0))
@@ -329,9 +333,25 @@ endif
 	./plebnet_generate.py TRIPLET=$(TRIPLET)
 #######################
 .PHONY: install
+.ONESHELL:
 install: init
-	bash -c 'TRIPLET=$(TRIPLET) services=bitcoind,docs,lnd,rtl,thunderhub,tor ./install.sh'
-	#bash -c 'make btcd'
+	bash -c "docker-compose down"
+	bash -c "python3 plebnet_generate.py TRIPLET=$(TRIPLET) services=$(SERVICES)"
+	bash -c "mkdir -p volumes"
+	bash -c "mkdir -p volumes/lnd_datadir"
+	bash -c "mkdir -p volumes/bitcoin_datadir"
+	bash -c "mkdir -p volumes/thub_datadir"
+	bash -c "mkdir -p volumes/rtl_datadir"
+	bash -c "mkdir -p volumes/tor_datadir"
+	bash -c "mkdir -p volumes/tor_servicesdir"
+	bash -c "mkdir -p volumes/tor_torrcdir"
+	bash -c "mkdir -p volumes/lndg_datadir"
+	bash -c "touch    volumes/lndg_datadir/db.sqlite3"
+
+	python3 plebnet_generate.py TRIPLET=$(TRIPLET) services=$(SERVICES)
+
+	docker-compose build --build-arg TRIPLET=$(TRIPLET)
+	docker-compose up --remove-orphans -d
 #######################
 .PHONY: uninstall
 uninstall:
