@@ -60,13 +60,20 @@ jobs:
         sudo systemctl restart docker
     - name: Download Umbrel OS build scripts
       run: |
-        git clone git://github.com/RandyMcMillan/umbrel-os.git
+        git clone git://github.com/$GITHUB_REPOSITORY_OWNER/playground-os.git
     - name: Setting env vars
       run: |
+        #NOTE GITHUB_WORKSPACE=/home/runner/work/plebnet-playground-docker/plebnet-playground-docker
+        #NOTE RUNNER_WORKSPACE=/home/runner/work/plebnet-playground-docker
+        #NOTE GITHUB_REPOSITORY=$GITHUB_REPOSITORY_OWNER/plebnet-playground-docker
+        echo $GITHUB_WORKSPACE
+        echo $RUNNER_WORKSPACE
+        echo $GITHUB_REPOSITORY
         UMBREL_OS_VERSION="dev"
-        IMAGE_NAME="umbrel-playground"
-        UMBREL_REPO="https://github.com/RandyMcMillan/umbrel.git"
-        UMBREL_BRANCH="umbrel-playground"
+        IMAGE_NAME="playground-os"
+        #UMBREL_REPO="https://github.com/RandyMcMillan/umbrel.git"
+        UMBREL_REPO=$GITHUB_REPOSITORY
+        UMBREL_BRANCH=$(git rev-parse --abbrev-ref HEAD)
         echo "UMBREL_OS_VERSION=$UMBREL_OS_VERSION" >> $GITHUB_ENV
         echo "IMAGE_NAME=$IMAGE_NAME">> $GITHUB_ENV
         echo "UMBREL_REPO=$UMBREL_REPO">> $GITHUB_ENV
@@ -75,9 +82,16 @@ jobs:
               
     - name: Build Umbrel OS
       run: |
+        #NOTE GITHUB_WORKSPACE=/home/runner/work/plebnet-playground-docker/plebnet-playground-docker
+        #NOTE RUNNER_WORKSPACE=/home/runner/work/plebnet-playground-docker
+        #NOTE GITHUB_REPOSITORY=$GITHUB_REPOSITORY_OWNER/plebnet-playground-docker
+        echo $GITHUB_WORKSPACE
+        echo $RUNNER_WORKSPACE
+        echo $GITHUB_REPOSITORY
         pushd $GITHUB_WORKSPACE && git submodule update --init && popd
-        pushd $GITHUB_WORKSPACE/apps/plebnet-playground && python3 plebnet_generate.py  TRIPLET=aarch64-linux-gnu && popd
-        cd umbrel-os
+        pushd $GITHUB_WORKSPACE && python3 plebnet_generate.py  TRIPLET=aarch64-linux-gnu && popd
+        #TODO where to instasll python3.8?
+        cd playground-os
         echo "Building $IMAGE_NAME"
         sudo IMG_FILENAME=$IMAGE_NAME ZIP_FILENAME=$IMAGE_NAME UMBREL_OS_VERSION=$UMBREL_OS_VERSION UMBREL_REPO=$UMBREL_REPO UMBREL_BRANCH=$UMBREL_BRANCH ./build.sh
         cd ..
