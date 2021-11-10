@@ -67,25 +67,38 @@ else
 fi
 
 
+if ! hash docker-compose 2>/dev/null; then
+    sudo apt-get install docker-compose
+fi
+
 if hash apt-get 2>/dev/null; then
     sudo apt-get update
-    sudo apt-get install -y build-essential \
-        tk-dev libncurses5-dev libncursesw5-dev \
-        libreadline6-dev libdb5.3-dev libgdbm-dev \
-        libsqlite3-dev libssl-dev libbz2-dev \
-        libexpat1-dev liblzma-dev zlib1g-dev libffi-dev
-    wget https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tar.xz
-    tar xf Python-3.8.0.tar.xz
-    cd Python-3.8.0
-    ./configure --enable-optimizations --prefix=/usr
-    make
-    sudo make altinstall
-    cd ..
-    sudo rm -r Python-3.8.0
-    rm Python-3.8.0.tar.xz
-    . ~/.bashrc
-    sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
-    python -V
+    sudo apt-get install -y python3
+    sudo apt-get install python3-pip
+    if ! hash python3 2>/dev/null; then
+        sudo apt-get install -y build-essential \
+            tk-dev libncurses5-dev libncursesw5-dev \
+            libreadline6-dev libdb5.3-dev libgdbm-dev \
+            libsqlite3-dev libssl-dev libbz2-dev \
+            libexpat1-dev liblzma-dev zlib1g-dev libffi-dev
+        wget https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tar.xz
+        tar xf Python-3.8.0.tar.xz
+        cd Python-3.8.0
+        ./configure --enable-optimizations --prefix=/usr
+        make
+        sudo make altinstall
+        cd ..
+        sudo rm -r Python-3.8.0
+        rm Python-3.8.0.tar.xz
+        . ~/.bashrc
+        sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
+        python -V
+        exit
+    fi
+    if ! hash pip3 2>/dev/null; then
+	sudo apt-get install python3-pip
+    fi
+exit
 fi
 
 if hash brew 2>/dev/null; then

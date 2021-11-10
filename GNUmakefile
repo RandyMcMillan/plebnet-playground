@@ -365,8 +365,9 @@ docs: init
 	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) docs
 #######################
 .PHONY: install-python38-sh
-install-python38-sh: init
+install-python38-sh:
 	bash -c './scripts/install-python3.8.sh'
+	make init
 #######################
 #.PHONY: run
 #run: build
