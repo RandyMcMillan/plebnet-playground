@@ -1,12 +1,20 @@
 #!/bin/bash
-echo "{ \"TIME\": $(date +%s) }"
+echo "{"
+echo "\"$(date +%s)\":["
+echo "{"
+echo "\"time\":\"$(date +%s)\""
+echo "},"
+SELF_ADDRESS=$(bitcoin-cli getnewaddress)
+export SELF_ADDRESS
+echo { \"SELF_ADDRESS\": \"$SELF_ADDRESS\" }
+echo "]"
+echo "}"
+exit
 #padtowidth=8
 #for i in 0 {0..200} {200..1000}; do
 #    fee=$(printf "%0*d\n" $padtowidth $i;)
 #    echo 0.$fee
 #done
-SELF_ADDRESS=$(bitcoin-cli getnewaddress)
-export SELF_ADDRESS
 echo { \"SELF_ADDRESS\": \"$SELF_ADDRESS\" }
 PLAY_BITCOIN_ADDRESS=$(play-bitcoin getnewaddress)
 export PLAY_BITCOIN_ADDRESS
