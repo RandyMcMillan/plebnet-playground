@@ -9,6 +9,8 @@ export OS_VERSION
 export UNAME_M
 export ARCH
 
+PATH=$PATH:/usr/local/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/bin
+
 report() {
 echo OS:
 echo "$OS" | awk '{print tolower($0)}'

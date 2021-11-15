@@ -348,6 +348,7 @@ initialize:
 	./scripts/initialize  #>&/dev/null
 #######################
 .PHONY: install
+.SILENT:
 install: init
 	bash -c './install.sh $(TRIPLET)'
 	#bash -c 'make btcd'
