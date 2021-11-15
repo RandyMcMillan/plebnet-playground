@@ -327,9 +327,9 @@ ifneq ($(shell id -u),0)
 	sudo -s bash -c 'install -v $(PWD)/getcoins.py  /usr/local/bin/play-getcoins'
 ifneq ($(PIP3),)
 	$(PIP3) install --upgrade -q pip
-	$(PYTHON3) -m pip -q install omegaconf
-	$(PIP3) install -q -r requirements.txt
-	pushd docs && $(PIP3) install -q -r requirements.txt && popd
+	$(PYTHON3) -m pip install omegaconf
+	$(PIP3) install -r requirements.txt
+	pushd docs && $(PIP3) install -r requirements.txt && popd
 endif
 else
 	bash -c 'install -v $(PWD)/scripts/*  /usr/local/bin'
