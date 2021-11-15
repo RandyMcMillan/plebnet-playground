@@ -321,15 +321,17 @@ init:
 #ifneq ($(shell id -u),0)
 #	@echo 'sudo make init #try if permissions issue'
 #endif
+	echo $(PYTHON3)
+	echo $(PIP3)
 ifneq ($(shell id -u),0)
 	sudo -s bash -c 'rm -f /usr/local/bin/play'
 	sudo -s bash -c 'install -v $(PWD)/scripts/*  /usr/local/bin'
 	sudo -s bash -c 'install -v $(PWD)/getcoins.py  /usr/local/bin/play-getcoins'
 ifneq ($(PIP3),)
-	$(PIP3) install --upgrade -q pip
+	$(PYTHON3) -m pip install --upgrade pip
 	$(PYTHON3) -m pip install omegaconf
-	$(PIP3) install -r requirements.txt
-	pushd docs && $(PIP3) install -r requirements.txt && popd
+	$(PYTHON3) -m pip install -r requirements.txt
+	pushd docs $(PYTHON3) -m pip install -r requirements.txt && popd
 endif
 else
 	bash -c 'install -v $(PWD)/scripts/*  /usr/local/bin'
