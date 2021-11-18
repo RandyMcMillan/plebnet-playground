@@ -319,8 +319,8 @@ endif
 .SILENT:
 init:
 ifneq ($(shell id -u),0)
-	@echo 'make super #if permissions issue'
-	@echo 'make init  #if permissions issue'
+	#@echo 'make super #if permissions issue'
+	#@echo 'make init  #if permissions issue'
 endif
 	echo $(PYTHON3)
 	echo $(PIP3)
