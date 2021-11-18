@@ -329,6 +329,7 @@ endif
 	sudo -s bash -c 'install -v $(PWD)/scripts/*  /usr/local/bin'
 	sudo -s bash -c 'install -v $(PWD)/getcoins.py  /usr/local/bin/play-getcoins'
 #ifneq ($(PIP3),)
+	$(PYTHON3) scripts/get-pip.py --user
 	$(PYTHON3) -m pip install --upgrade pip
 	$(PYTHON3) -m pip install -q omegaconf
 	$(PYTHON3) -m pip install -q -r requirements.txt
