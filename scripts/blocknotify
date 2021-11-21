@@ -1,4 +1,23 @@
 #!/bin/bash
+
+#To calculate nbits
+#cd ~/bitcoin && \
+#$ ./contrib/signet/miner --cli="./src/bitcoin-cli" calibrate --grind-cmd="./src/bitcoin-util grind" --seconds=600
+#$ $nbits=1d03cca1 #for 600s average mining time
+#$ ./contrib/signet/miner --cli="./src/bitcoin-cli -datadir=$datadir" generate --address $ADDR --grind-cmd="./src/bitcoin-util grind" --nbits=$nbits --ongoing
+
+
+minenewblock(){
+#sleep 570;
+bitcoin-cli -signet -rpcwallet=playground-wallet getblocktemplate '{"rules": ["signet","segwit"]}' |
+      ~/bitcoin/contrib/signet/miner --cli="bitcoin-cli" genpsbt --address="tb1q47e90hgdamccka8p86ja2sfa9apqx4p6xh4mt5" |
+      bitcoin-cli -signet -rpcwallet=playground-wallet  -stdin walletprocesspsbt |
+      jq -r .psbt |
+      ~/bitcoin/contrib/signet/miner --cli="bitcoin-cli" solvepsbt --grind-cmd="bitcoin-util grind" |
+      bitcoin-cli -signet -rpcwallet=playground-wallet  -stdin submitblock
+  }
+
+
 #BEGIN OF OBJECT
 mkdir -p /tmp/blocknotify
 LOG_DIR=/tmp/blocknotify
@@ -34,39 +53,37 @@ play-getcoins -a $( echo  play-getcoins -a tb1qu7cc9q5xwgc4ygunf98sy0ul8r9tpwr6z
 #settxfee always less than 0.1000
 echo "{ \"\$count\$k\$j\": \"$count$k$j\" },"
 
-echo "{ \"settxfee 0.00$count$k$j\": \"$(bitcoin-cli settxfee 0.00$count$k$j)\" },"
+echo "{ \"settxfee 0.00$count$k$j\": \"$(bitcoin-cli -rpcwallet=playground-wallet settxfee 0.00$count$k$j)\" }," > /dev/null 2>&1
 #UNAMED
-TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.001$count$k$j)
-echo "{ \"TXHASH\": \"$TXHASH\" },"
+TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.001$count$k$j) > /dev/null 2>&1
+echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 #NAMED
-TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.01$count$k$j comment=$TIME-$count-$k-$j )
-echo "{ \"TXHASH\": \"$TXHASH\" },"
+TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.01$count$k$j comment=$TIME-$count-$k-$j ) > /dev/null 2>&1
+echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 
 #UNAMED
-TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.001$count$k$j)
-echo "{ \"TXHASH\": \"$TXHASH\" },"
+TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.001$count$k$j) > /dev/null 2>&1
+echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 #NAMED
-TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.01$count$k$j comment=$TIME-$count-$k-$j )
-echo "{ \"TXHASH\": \"$TXHASH\" },"
+TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.01$count$k$j comment=$TIME-$count-$k-$j ) > /dev/null 2>&1
+echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 
 #UNAMED
-TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.001$count$k$j)
-echo "{ \"TXHASH\": \"$TXHASH\" },"
+TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.001$count$k$j) > /dev/null 2>&1
+echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 #NAMED
-TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.$count$k$j comment=$TIME-$count-$k-$j )
-echo "{ \"TXHASH\": \"$TXHASH\" },"
+TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.$count$k$j comment=$TIME-$count-$k-$j ) > /dev/null 2>&1
+echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 
 #UNAMED
-TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.001$count$k$j)
-echo "{ \"TXHASH\": \"$TXHASH\" },"
+TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.001$count$k$j) > /dev/null 2>&1
+echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 #NAMED
-TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.01$count$k$j comment=$TIME-$count-$k-$j )
-echo "{ \"TXHASH\": \"$TXHASH\" },"
+TXHASH=$(bitcoin-cli  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.01$count$k$j comment=$TIME-$count-$k-$j ) > /dev/null 2>&1
+echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 
 play-bitcoin 'bitcoin-cli -rpcwallet=playground-wallet settxfee 0.0$count$k$j'
 play-bitcoin sendtoaddress playground-wallet $SELF_ADDRESS 0.1
-
-
 
 }
 end_time(){
