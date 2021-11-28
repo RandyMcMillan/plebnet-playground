@@ -42,8 +42,13 @@ export BITCOIN_CLI
 $BITCOIN_CLI -signet createwallet playground-wallet
 $BITCOIN_CLI -signet -rpcwallet=playground-wallet settxfee 0.00001
 echo LINE 44
-$BITCOIN_CLI -signet -rpcwallet=playground-wallet sendtoaddress tb1qhje3dnh662lr0tcnvr3tutv3wz496c5pywrlwl 0.1 -fallbackfee=0.00001
-$BITCOIN_CLI -signet -rpcwallet=playground-wallet sendtoaddress tb1qzmfsyaxvp8cjq2tf0f0pamvnu79tter3ug9mpn 0.1 -fallbackfee=0.00001
+#$BITCOIN_CLI -signet -rpcwallet=playground-wallet sendtoaddress tb1qhje3dnh662lr0tcnvr3tutv3wz496c5pywrlwl 0.01 -fallbackfee=0.00001
+#$BITCOIN_CLI -signet -rpcwallet=playground-wallet sendtoaddress tb1qzmfsyaxvp8cjq2tf0f0pamvnu79tter3ug9mpn 0.01 -fallbackfee=0.00001
+
+
+
+$BITCOIN_CLI -signet -rpcwallet=playground-wallet sendtoaddress $($BITCOIN_CLI -signet -rpcwallet=playground-wallet getnewaddress) 0.01 -fallbackfee=0.00001
+$BITCOIN_CLI -signet -rpcwallet=playground-wallet sendtoaddress $(play-getcoins -r true)      0.01 -fallbackfee=0.00001
 
 #echo $BITCOIN_CLI
 
@@ -81,7 +86,7 @@ TXHASH=$(bitcoin-cli -signet  -rpcwallet=playground-wallet sendtoaddress "$PLAY_
 echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 #NAMED
 echo LINE 83
-TXHASH=$(bitcoin-cli -signet  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.00001$count$j fee_rate=10 comment=$TIME-$count-$k-$j ) > /dev/null 2>&1
+TXHASH=$(bitcoin-cli -signet  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.00001$count$j fee_rate=1 comment=$TIME-$count-$k-$j ) > /dev/null 2>&1
 echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 
 echo LINE 86
@@ -89,7 +94,7 @@ echo LINE 86
 TXHASH=$(bitcoin-cli  -signet -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.00001$count$j -fallbackfee=0.00001 ) > /dev/null 2>&1
 echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 #NAMED
-TXHASH=$(bitcoin-cli -signet  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.00001$count$j fee_rate=5 comment=$TIME-$count-$k-$j ) > /dev/null 2>&1
+TXHASH=$(bitcoin-cli -signet  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.00001$count$j fee_rate=2 comment=$TIME-$count-$k-$j ) > /dev/null 2>&1
 echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 
 echo LINE 94
@@ -97,7 +102,7 @@ echo LINE 94
 TXHASH=$(bitcoin-cli  -signet -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.00001$count$j -fallbackfee=0.00001 ) > /dev/null 2>&1
 echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 #NAMED
-TXHASH=$(bitcoin-cli -signet  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.0000$count$j fee_rate=1 comment=$TIME-$count-$k-$j ) > /dev/null 2>&1
+TXHASH=$(bitcoin-cli -signet  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.0000$count$j fee_rate=3 comment=$TIME-$count-$k-$j ) > /dev/null 2>&1
 echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 
 echo LINE 102
@@ -105,7 +110,7 @@ echo LINE 102
 TXHASH=$(bitcoin-cli -signet  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.00001$count$j -fallbackfee=0.00001 ) > /dev/null 2>&1
 echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 #NAMED
-TXHASH=$(bitcoin-cli -signet  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.00001$count$j fee_rate=2 comment=$TIME-$count-$k-$j ) > /dev/null 2>&1
+TXHASH=$(bitcoin-cli -signet  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.00001$count$j fee_rate=4 comment=$TIME-$count-$k-$j ) > /dev/null 2>&1
 echo "{ \"TXHASH\": \"$TXHASH\" }," > /dev/null 2>&1
 
 echo LINE 110
