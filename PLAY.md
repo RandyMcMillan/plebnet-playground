@@ -43,11 +43,22 @@ play-bitcoin getnewaddress playground-wallet
 play-bitcoin getnewaddress <walletname>
 play-bitcoin getbalance
 play-bitcoin getbalances
+play-bitcoin sendtoaddress
 
 https://www.plebnet.fun
 
 Fund bitcoin playground-wallet:
-play-getcoins -a $(play-bitcoin getnewaddress)
+play-getcoins -a $(play-bitcoin getnewaddress) -r true
+
+play-bitcoin sendtoaddress playground-wallet <newaddress> 0.01
+
+Desktop Bitcoin Core:
+
+MacOS:
+bitcoind -conf=/Users/<user_name>/<plebnet-playground-docker/bitcoin-signet/bitcoin.conf>/
+
+Linux/Ubuntu:
+bitcoind -conf=/home/<user_name>/<plebnet-playground-docker/bitcoin-signet/bitcoin.conf>/
 
 newaddress=$(bitcoin-cli -signet getnewaddress)
 play-bitcoin sendtoaddress playground-wallet $newaddress 0.01
