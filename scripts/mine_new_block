@@ -1,0 +1,22 @@
+#!/bin/bash
+#sleep 570;
+#MINER_LOCATION=$HOME/bitcoin/contrib/signet
+#echo $MINER_LOCATION
+#bitcoin-cli -rpcwallet=playground-wallet -signet getblocktemplate '{"rules": ["signet","segwit"]}' |
+#    $MINER_LOCATION/miner --cli="bitcoin-cli" genpsbt --address="tb1q47e90hgdamccka8p86ja2sfa9apqx4p6xh4mt5" |
+#    bitcoin-cli -rpcwallet=playground-wallet -signet -stdin walletprocesspsbt |
+#    jq -r .psbt |
+#    $MINER_LOCATION/miner --cli="bitcoin-cli" solvepsbt --grind-cmd="bitcoin-util grind" |
+#    bitcoin-cli  -rpcwallet=playground-wallet -signet -stdin submitblock
+##sleep 570;
+#
+#
+#
+#!/bin/bash
+#sleep 570;
+bitcoin-cli -signet getblocktemplate '{"rules": ["signet","segwit"]}' |
+    $HOME/bitcoin/contrib/signet/miner --cli="bitcoin-cli" genpsbt --address="tb1q47e90hgdamccka8p86ja2sfa9apqx4p6xh4mt5" |
+    bitcoin-cli -rpcwallet=playground-wallet -signet -stdin walletprocesspsbt |
+    jq -r .psbt |
+    $HOME/bitcoin/contrib/signet/miner --cli="bitcoin-cli" solvepsbt --grind-cmd="bitcoin-util grind" |
+    bitcoin-cli -rpcwallet=playground-wallet -signet -stdin submitblock
