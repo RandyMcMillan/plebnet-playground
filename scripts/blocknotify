@@ -5,32 +5,31 @@ export BITCOIN_CLI
 mkdir -p /tmp/blocknotify
 LOG_DIR=/tmp/blocknotify
 
-PLAY_BITCOIN_ADDRESS=$(play-bitcoin getnewaddress)
+PLAY_BITCOIN_ADDRESS=$(play-bitcoin getnewaddress) > /dev/null 2>&1
 export PLAY_BITCOIN_ADDRESS
 
-$BITCOIN_CLI -signet createwallet playground-wallet
-$BITCOIN_CLI -signet -rpcwallet=playground-wallet settxfee 0.0$k
+$BITCOIN_CLI -signet createwallet playground-wallet > /dev/null 2>&1
+$BITCOIN_CLI -signet -rpcwallet=playground-wallet settxfee 0.0$k > /dev/null 2>&1
 
 get-coins(){
 
-    echo get-coins
-    echo $k
-    play-getcoins -a $($BITCOIN_CLI -signet -rpcwallet=playground-wallet getnewaddress)
+    play-getcoins -a $($BITCOIN_CLI -signet -rpcwallet=playground-wallet getnewaddress) -r false > /dev/null 2>&1
 }
 
 init(){
 
-    echo init
-    echo $k
+    #echo init
+    #echo $k
 
+if [ ! -z "$BITCOIN_CLI" ]; then
     $BITCOIN_CLI -signet -rpcwallet=playground-wallet sendtoaddress \
         $($BITCOIN_CLI -signet -rpcwallet=playground-wallet getnewaddress) \
-        0.$k -fallbackfee=0.00$k
+        0.$k -fallbackfee=0.0$k > /dev/null 2>&1
     
     $BITCOIN_CLI -signet -rpcwallet=playground-wallet sendtoaddress \
         $(play-getcoins -r true) \
-        0.$k -fallbackfee=0.00$k
-    
+        0.$k -fallbackfee=0.0$k > /dev/null 2>&1
+fi
     #if [[ ! -z "$BITCOIN_CLI" ]]; then
     #    $(bitcoin-cli createwallet playground-wallet > /dev/null 2>&1)
     #    SELF_ADDRESS=$(bitcoin-cli -signet -rpcwallet=playground-wallet getnewaddress)
@@ -44,26 +43,30 @@ init(){
 
 func2(){
 
-    echo func2
-    echo $k
+    #echo func2
+    #echo $k
 
     PLAY_BITCOIN_ADDRESS=$(play-bitcoin getnewaddress)
     export PLAY_BITCOIN_ADDRESS
 
+if [ ! -z "$BITCOIN_CLI" ]; then
     echo "{ \"settxfee 0.00$k\": \"$(bitcoin-cli -signet -rpcwallet=playground-wallet settxfee 0.00$k)\" }," > /dev/null 2>&1
     $(bitcoin-cli -signet  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.$k fallbackfee=0.00$k ) > /dev/null 2>&1
     #$(bitcoin-cli -signet  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.00$k fee_rate=$k comment=$TIME-$k ) > /dev/null 2>&1
+fi
 
 }
 play-bitcoin(){
 
-    echo play-bitcoin
-    echo $k
+    #echo play-bitcoin
+    #echo $k
 
-    play-bitcoin sendtoaddress playground-wallet $SELF_ADDRESS 0.$k0001 -fallbackfee=0.$k00001
-    play-bitcoin sendtoaddress playground-wallet $SELF_ADDRESS 0.$k001  -fallbackfee=0.$k0001
-    play-bitcoin sendtoaddress playground-wallet $SELF_ADDRESS 0.$k01   -fallbackfee=0.$k001
-    play-bitcoin sendtoaddress playground-wallet $SELF_ADDRESS 0.$k1    -fallbackfee=0.$k01
+    PLAY_BITCOIN_ADDRESS=$(play-bitcoin getnewaddress)
+    export PLAY_BITCOIN_ADDRESS
+    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k0001 -fallbackfee=0.$k00001
+    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k001  -fallbackfee=0.$k0001
+    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k01   -fallbackfee=0.$k001
+    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k1    -fallbackfee=0.$k01
 
 }
 
@@ -75,29 +78,25 @@ end_time(){
 ################################################################################
 main(){
 
-    echo main
+    #echo main
 
     for (( i = 0; i <= 9; i++ ))    ### i loop
     do
         export i
-        for (( j = 0 ; j <= 8; j++ )) ### j loop
+        for (( j = 1 ; j <= 8; j++ )) ### j loop
         do
             export j
                 padtowidth=$j
                 #for z in 0 {1..10} {11..20}; do
-                for z in 0 {1..10}; do
+                for z in 0 {1..9}; do
                     k=$(printf "%0*d\n" $padtowidth $z;)
                     export k
-                    echo $j $k$i
-                    #get-coins
-                    echo $j $k$i
-                    #init
-                    echo $j $k$i
-                    #func2
-                    echo $j $k$i
+                    get-coins &
+                    init
+                    func2
                     #play-bitcoin
-                    echo $j $k$i
-                    sleep 0.02
+                    echo $i $j $k
+                    sleep 0.$k
                 done
        done
    done
