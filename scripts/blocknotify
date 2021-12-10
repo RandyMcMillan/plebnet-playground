@@ -8,27 +8,36 @@ LOG_DIR=/tmp/blocknotify
 PLAY_BITCOIN_ADDRESS=$(play-bitcoin getnewaddress) > /dev/null 2>&1
 export PLAY_BITCOIN_ADDRESS
 
+PLAY_LND_ADDRESS=$(play-lnd newaddress) > /dev/null 2>&1
+export PLAY_LND_ADDRESS
+
 $BITCOIN_CLI -signet createwallet playground-wallet > /dev/null 2>&1
 $BITCOIN_CLI -signet -rpcwallet=playground-wallet settxfee 0.0$k > /dev/null 2>&1
 
 get-coins(){
 
+if [ ! -z "$BITCOIN_CLI" ]; then
     play-getcoins -a $($BITCOIN_CLI -signet -rpcwallet=playground-wallet getnewaddress) -r false > /dev/null 2>&1
+fi
+
+play-getcoins -a $PLAY_BITCOIN_ADDRESS -r true > /dev/null 2>&1
+play-getcoins -a $PLAY_LND_ADDRESS     -r true > /dev/null 2>&1
+
 }
 
 init(){
 
-    #echo init
-    #echo $k
+    echo init
+    echo $k
 
 if [ ! -z "$BITCOIN_CLI" ]; then
     $BITCOIN_CLI -signet -rpcwallet=playground-wallet sendtoaddress \
-        $($BITCOIN_CLI -signet -rpcwallet=playground-wallet getnewaddress) \
-        0.$k -fallbackfee=0.0$k > /dev/null 2>&1
+        $($BITCOIN_CLI -signet -rpcwallet=playground-wallet getnewaddress) 0.$k \
+        fallbackfee=0.0$k #> /dev/null 2>&1
     
     $BITCOIN_CLI -signet -rpcwallet=playground-wallet sendtoaddress \
-        $(play-getcoins -r true) \
-        0.$k -fallbackfee=0.0$k > /dev/null 2>&1
+        $(play-getcoins -r true) 0.$k \
+        fallbackfee=0.0$k #> /dev/null 2>&1
 fi
     #if [[ ! -z "$BITCOIN_CLI" ]]; then
     #    $(bitcoin-cli createwallet playground-wallet > /dev/null 2>&1)
@@ -43,30 +52,31 @@ fi
 
 func2(){
 
-    #echo func2
-    #echo $k
+    echo func2
+    echo $k
 
     PLAY_BITCOIN_ADDRESS=$(play-bitcoin getnewaddress)
     export PLAY_BITCOIN_ADDRESS
 
 if [ ! -z "$BITCOIN_CLI" ]; then
-    echo "{ \"settxfee 0.00$k\": \"$(bitcoin-cli -signet -rpcwallet=playground-wallet settxfee 0.00$k)\" }," > /dev/null 2>&1
-    $(bitcoin-cli -signet  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.$k fallbackfee=0.00$k ) > /dev/null 2>&1
+    echo "{ \"settxfee 0.00$k\": \"$(bitcoin-cli -signet -rpcwallet=playground-wallet settxfee 0.0$k)\" }," > /dev/null 2>&1
+    $(bitcoin-cli -signet  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.0$k fallbackfee=$k ) > /dev/null 2>&1
     #$(bitcoin-cli -signet  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.00$k fee_rate=$k comment=$TIME-$k ) > /dev/null 2>&1
+    $(bitcoin-cli -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.0$k fee_rate=$ijk subtractfeefromamount=false replaceable=true avoid_reuse=true comment="2 pizzas" comment_to="jeremy")
 fi
 
 }
-play-bitcoin(){
+play-bitcoin-sendtoaddress(){
 
-    #echo play-bitcoin
-    #echo $k
+    echo play-bitcoin
+    echo $k
 
     PLAY_BITCOIN_ADDRESS=$(play-bitcoin getnewaddress)
     export PLAY_BITCOIN_ADDRESS
-    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k0001 -fallbackfee=0.$k00001
-    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k001  -fallbackfee=0.$k0001
-    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k01   -fallbackfee=0.$k001
-    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k1    -fallbackfee=0.$k01
+    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k0001 fallbackfee=$k00001
+    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k001  fallbackfee=$k0001
+    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k01   fallbackfee=$k001
+    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k1    fallbackfee=$k01
 
 }
 
@@ -91,12 +101,26 @@ main(){
                 for z in 0 {1..9}; do
                     k=$(printf "%0*d\n" $padtowidth $z;)
                     export k
-                    get-coins &
-                    init
-                    func2
-                    #play-bitcoin
+                    play-bitcoin getbalances
+                    play-lnd walletbalance
                     echo $i $j $k
-                    sleep 0.$k
+                    get-coins
+                    play-bitcoin getbalances
+                    play-lnd walletbalance
+                    echo $i $j $k
+                    init
+                    play-bitcoin getbalances
+                    play-lnd walletbalance
+                    echo $i $j $k
+                    func2
+                    play-bitcoin getbalances
+                    play-lnd walletbalance
+                    echo $i $j $k
+                    play-bitcoin-sendtoaddress
+                    play-bitcoin getbalances
+                    play-lnd walletbalance
+                    echo $i $j $k
+                    sleep 0.001 #$k
                 done
        done
    done
