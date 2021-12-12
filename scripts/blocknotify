@@ -33,11 +33,11 @@ init(){
 if [ ! -z "$BITCOIN_CLI" ]; then
     $BITCOIN_CLI -signet -rpcwallet=playground-wallet sendtoaddress \
         $($BITCOIN_CLI -signet -rpcwallet=playground-wallet getnewaddress) 0.$k \
-        fallbackfee=0.0$k #> /dev/null 2>&1
+        -fallbackfee=0.0$k #> /dev/null 2>&1
     
     $BITCOIN_CLI -signet -rpcwallet=playground-wallet sendtoaddress \
         $(play-getcoins -r true) 0.$k \
-        fallbackfee=0.0$k #> /dev/null 2>&1
+        -fallbackfee=0.0$k #> /dev/null 2>&1
 fi
     #if [[ ! -z "$BITCOIN_CLI" ]]; then
     #    $(bitcoin-cli createwallet playground-wallet > /dev/null 2>&1)
@@ -60,23 +60,23 @@ func2(){
 
 if [ ! -z "$BITCOIN_CLI" ]; then
     echo "{ \"settxfee 0.00$k\": \"$(bitcoin-cli -signet -rpcwallet=playground-wallet settxfee 0.0$k)\" }," > /dev/null 2>&1
-    $(bitcoin-cli -signet  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.0$k fallbackfee=$k ) > /dev/null 2>&1
+    $(bitcoin-cli -signet  -rpcwallet=playground-wallet sendtoaddress "$PLAY_BITCOIN_ADDRESS"  0.0$k -fallbackfee=$k ) > /dev/null 2>&1
     #$(bitcoin-cli -signet  -rpcwallet=playground-wallet -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.00$k fee_rate=$k comment=$TIME-$k ) > /dev/null 2>&1
-    $(bitcoin-cli -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=0.0$k fee_rate=$ijk subtractfeefromamount=false replaceable=true avoid_reuse=true comment="2 pizzas" comment_to="jeremy")
+    $(bitcoin-cli -named sendtoaddress address="$PLAY_BITCOIN_ADDRESS" amount=$k$i$j fee_rate=$k$i$j subtractfeefromamount=false replaceable=true avoid_reuse=true comment="2 pizzas" comment_to="jeremy")
 fi
 
 }
 play-bitcoin-sendtoaddress(){
 
-    echo play-bitcoin
+    echo play-bitcoin-sendtoaddress
     echo $k
 
     PLAY_BITCOIN_ADDRESS=$(play-bitcoin getnewaddress)
     export PLAY_BITCOIN_ADDRESS
-    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k0001 fallbackfee=$k00001
-    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k001  fallbackfee=$k0001
-    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k01   fallbackfee=$k001
-    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_SELF 0.$k1    fallbackfee=$k01
+    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_ADDRESS 0.01$k0001 #-fallbackfee=$k00001
+    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_ADDRESS 0.01$k001  #-fallbackfee=$k0001
+    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_ADDRESS 0.01$k01   #-fallbackfee=$k001
+    play-bitcoin sendtoaddress playground-wallet $PLAY_BITCOIN_ADDRESS 0.01$k1    #-fallbackfee=$k01
 
 }
 
