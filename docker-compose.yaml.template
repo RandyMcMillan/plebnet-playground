@@ -65,6 +65,33 @@ services:
       - type: bind
         source: ${oc.env:PWD}/volumes/lnd_datadir
         target: /root/.lnd/
+
+  clightning_bitcoin:
+    image: elementsproject/lightningd
+    container_name: playground-lightningd
+    command:
+      - --bitcoin-rpcconnect=bitcoind
+      - --bitcoin-rpcuser=rpcuser
+      - --bitcoin-rpcpassword=rpcpass
+      - --network=testnet
+      - --alias=myawesomenode
+      - --log-level=debug
+    environment:
+      EXPOSE_TCP: "true"
+    expose:
+      - "9735"
+    ports:
+      - "0.0.0.0:9735:9735"
+    volumes:
+      - type: bind
+        source: ${oc.env:PWD}/volumes/clightning_datadir
+        target: /root/.lightning
+      - type: bind
+        source: ${oc.env:PWD}/volumes/bitcoin_datadir
+        target: /etc/bitcoin
+    links:
+      - bitcoind
+
   tor:
       restart: unless-stopped
       container_name: playground-tor
