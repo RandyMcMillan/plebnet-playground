@@ -344,15 +344,20 @@ endif
 .SILENT:
 init:
 ifneq ($(shell id -u),0)
-	@echo 'make super #if permissions issue'
-	@echo 'make init  #if permissions issue'
+	echo 'Try:'
+	echo 'sudo -sH make init install'
+	echo 'If permissions issue'
+	echo
 endif
 	echo $(PYTHON3)
 	echo $(PIP3)
 #ifneq ($(shell id -u),0)
-	sudo -s bash -c 'rm -f /usr/local/bin/play'
-	sudo -s bash -c 'install -v $(PWD)/scripts/*  /usr/local/bin'
-	sudo -s bash -c 'install -v $(PWD)/getcoins.py  /usr/local/bin/play-getcoins'
+	bash -c 'sudo -s rm -f /usr/local/bin/play*'
+	bash -c 'sudo -s rm -f /usr/local/bin/README.md'
+	bash -c 'sudo -s rm -f /usr/local/bin/blocknotify'
+	bash -c 'sudo -s install -v $(PWD)/scripts/blocknotify  /usr/local/bin'
+	bash -c 'sudo -s install -v $(PWD)/scripts/*  /usr/local/bin'
+	bash -c 'sudo -s install -v $(PWD)/getcoins.py  /usr/local/bin/play-getcoins'
 #ifneq ($(PIP3),)
 	$(PYTHON3) -m pip install --upgrade pip
 	$(PYTHON3) -m pip install -q omegaconf
@@ -376,6 +381,11 @@ initialize:
 .PHONY: install
 .SILENT:
 install: init
+ifneq ($(shell id -u),0)
+	echo 'Try:'
+	echo 'sudo -sH make init install'
+	echo 'If permissions issue'
+endif
 	bash -c './install.sh $(TRIPLET)'
 	#bash -c 'make btcd'
 #######################
