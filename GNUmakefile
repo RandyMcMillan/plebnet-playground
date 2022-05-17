@@ -385,8 +385,9 @@ ifneq ($(shell id -u),0)
 	echo 'Try:'
 	echo 'sudo -sH make init install'
 	echo 'If permissions issue'
+	sudo -sH ./install.sh $(TRIPLET)
 endif
-	bash -c './install.sh $(TRIPLET)'
+	./install.sh $(TRIPLET)
 	#bash -c 'make btcd'
 #######################
 .PHONY: uninstall
