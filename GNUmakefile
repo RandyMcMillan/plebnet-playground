@@ -363,7 +363,7 @@ endif
 	bash -c 'install -v $(PWD)/scripts/*  /usr/local/bin'
 	bash -c 'install -v $(PWD)/getcoins.py  /usr/local/bin/play-getcoins'
 #endif
-	./plebnet_generate.py TRIPLET=$(TRIPLET) services=$(SERVICES)
+	$(PYTHON3) plebnet_generate.py services=$(SERVICES)
 #######################
 .PHONY: blocknotify
 blocknotify:
@@ -376,12 +376,12 @@ initialize:
 .PHONY: install
 .SILENT:
 install: init
-	bash -c './install.sh $(TRIPLET)'
+	bash -c './install.sh'
 	#bash -c 'make btcd'
 #######################
 .PHONY: uninstall
 uninstall:
-	bash -c './uninstall.sh $(TRIPLET)'
+	bash -c './uninstall.sh'
 #######################
 .PHONY: run
 run: docs init
