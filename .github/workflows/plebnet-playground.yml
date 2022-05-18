@@ -51,7 +51,8 @@ jobs:
         uses: actions/checkout@v2
       - name: make initialize init help report
         run: |
-          test -z "$(docker ps -q 2>/dev/null)" && $(docker ps -q 2>/dev/null | xargs -L1 docker stop)
+          test -z "$(docker ps -q 2>/dev/null)" && $(docker ps -q 2>/dev/null | xargs -L1 docker stop) || echo "docker already stopped!"
+          make nuke-docker
           make initialize init help report
       - name: install, build, and test
         run: |
