@@ -49,17 +49,17 @@ jobs:
           access_token: ${{ github.token }}
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: make initialize init help report
+      - name: make venv && install.sh make help report
         run: |
-          test -z "$(docker ps -q 2>/dev/null)" || $(docker ps -q 2>/dev/null | xargs -L1 docker stop) || echo "docker already stopped!"
-          make nuke-docker
-          make initialize init help report
-      - name: install, build, and test
+          make venv && . .venv/bin/activate
+          make init
+          ./install.sh
+          make help report
+      - name: make initialize, venv, init, build, install
         run: |
-          make initialize init
-          pip install -r docs/requirements.txt
-          pip install -r requirements.txt
-          make blocknotify
+          make initialize
+          make venv && . .venv/bin/activate
+          make init
           make build nocache=true
           make build para=true
           make install verbose=true
