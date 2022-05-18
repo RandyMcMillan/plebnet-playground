@@ -1,0 +1,44 @@
+name: virtualenv
+
+on: [push]
+
+jobs:
+  create-virtualenv:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v2
+    - uses: syphar/restore-virtualenv@v1
+      id: cache-virtualenv
+    - uses: syphar/restore-pip-download-cache@v1
+      if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+    - run: pip install -r requirements.txt
+      if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+    - run: |
+        make init venv test-venv
+
+  linter:
+    needs: create-virtualenv
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v2
+    - uses: syphar/restore-virtualenv@v1
+      id: cache-virtualenv
+    - run: |
+        make init venv && . .venv/bin/activate && ./install.sh
+    - run: make build
+    - run: make install
+
+  make-init-venv-test-venv:
+    needs: create-virtualenv
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v2
+    - uses: syphar/restore-virtualenv@v1
+      id: cache-virtualenv
+    - run: |
+        make init venv && . .venv/bin/activate && ./install.sh
+    - run: make build
+    - run: make install
