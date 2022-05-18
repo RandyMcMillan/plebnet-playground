@@ -56,7 +56,8 @@ while ! docker system info > /dev/null 2>&1; do
         echo "Waiting for docker to start..."
         # systemctl enable docker.service
         # systemctl enable containerd.service
-        systemctl restart docker.service
+        systemctl restart docker.service ||
+            echo "Install Docker.app\n Try:\nmake initialize"
     fi
     if [[ "$(uname -s)" == "Darwin" ]]; then
         echo "Waiting for docker to start..."
