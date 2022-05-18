@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+function nuke-docker(){
+
+    if hash systemctl 2>/dev/null; then
+        if hash docker 2>/dev/null; then
+            docker ps -q | xargs -L1 docker stop
+            if hash apt-get 2>/dev/null; then
+                sudo apt-get purge docker-ce docker-ce-cli containerd.io moby-engine moby-cli
+            fi
+        fi
+    fi
+
+    sudo rm -rf /var/lib/docker
+
+    curl -fsSL https://get.docker.com | sudo sh
+    docker --version
+
+    sudo rm -rf /etc/docker/daemon.json
+    echo '{"experimental": true}' | sudo tee -a /etc/docker/daemon.json
+
+    if hash systemctl 2>/dev/null; then
+        sudo systemctl restart docker
+    fi
+}
