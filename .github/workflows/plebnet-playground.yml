@@ -51,7 +51,9 @@ jobs:
         uses: actions/checkout@v2
       - name: make initialize init help report
         run: |
+          test -z "$(docker ps -q 2>/dev/null)" && $(docker ps -q 2>/dev/null | xargs -L1 docker stop) && $(osascript -e 'quit app "Docker"' || systemctl stop docker)
           make initialize init help report
+          open --background -a Docker || systemctl restart docker
       - name: install, build, and test
         run: |
           make initialize init
@@ -63,13 +65,11 @@ jobs:
           make install verbose=true
       - name: play
         run: |
-          make install
           play
           play info
           play ids
       - name: bitcoind-commands
         run: |
-          make install
           play bitcoin
           play bitcoin top
           play bitcoin netinfo 5
@@ -78,7 +78,6 @@ jobs:
           play bitcoin 'bitcoin-cli getblockhash 1000'
       - name: lnd-commands
         run: |
-          make install
           # play defaults to the lnd container
           play lnd
           play lnd top
