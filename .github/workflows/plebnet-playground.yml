@@ -31,17 +31,17 @@ jobs:
     name: github-workspace
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-latest]
+        os: [ubuntu-20.04, ubuntu-latest, macos-10.15, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Print github workspace
         run: |
           printenv
 
-  ubuntu-build_and_test:
+  build_and_test_matrix:
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-latest]
+        os: [ubuntu-20.04, ubuntu-latest, macos-10.15, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: styfle/cancel-workflow-action@0.8.0
@@ -54,16 +54,13 @@ jobs:
           make initialize init help report
       - name: install, build, and test
         run: |
-          sudo apt install python python3
-          sudo apt install -y mkdocs
+          make initialize init
           pip install -r docs/requirements.txt
           pip install -r requirements.txt
           make blocknotify
           make build nocache=true
           make build para=true
           make install verbose=true
-          blocknotify | jq . & exit
-          #make uninstall
       - name: play
         run: |
           make install
