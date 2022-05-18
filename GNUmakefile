@@ -391,6 +391,10 @@ blocknotify:
 initialize:
 	./scripts/initialize  #>&/dev/null
 #######################
+.PHONY: nuke-docker
+nuke-docker:
+	./scripts/nuke-docker  #>&/dev/null
+#######################
 .PHONY: install
 .SILENT:
 install: init
