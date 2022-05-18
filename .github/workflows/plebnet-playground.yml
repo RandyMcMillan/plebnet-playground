@@ -31,7 +31,7 @@ jobs:
     name: github-workspace
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-latest]
+        os: [ubuntu-20.04, ubuntu-latest, macos-10.15, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Print github workspace
@@ -41,7 +41,7 @@ jobs:
   ubuntu-build_and_test:
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-latest]
+        os: [ubuntu-20.04, ubuntu-latest, macos-10.15, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: styfle/cancel-workflow-action@0.8.0
