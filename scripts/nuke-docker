@@ -14,6 +14,8 @@ function nuke-docker(){
 
     sudo rm -rf /var/lib/docker
 
+    apt-get install containerd
+
     curl -fsSL https://get.docker.com | sudo sh
     docker --version
 
