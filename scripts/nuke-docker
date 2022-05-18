@@ -3,9 +3,11 @@
 function nuke-docker(){
 
     if hash systemctl 2>/dev/null; then
-        sudo systemctl stop docker
-        if hash apt-get 2>/dev/null; then
-            sudo apt-get purge docker-ce docker-ce-cli containerd.io moby-engine moby-cli
+        if hash docker 2>/dev/null; then
+            docker ps -q | xargs -L1 docker stop
+            if hash apt-get 2>/dev/null; then
+                sudo apt-get purge docker-ce docker-ce-cli containerd.io moby-engine moby-cli
+            fi
         fi
     fi
 
