@@ -49,13 +49,15 @@ jobs:
           access_token: ${{ github.token }}
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: make initialize init help report
+      - name: install.sh make initialize init help report
         run: |
-          test -z "$(docker ps -q 2>/dev/null)" || $(docker ps -q 2>/dev/null | xargs -L1 docker stop) || echo "docker already stopped!"
-          make nuke-docker
+          ./install.sh
+          # test -z "$(docker ps -q 2>/dev/null)" || $(docker ps -q 2>/dev/null | xargs -L1 docker stop) || echo "docker already stopped!"
+          # make nuke-docker
           make initialize init help report
       - name: install, build, and test
         run: |
+          ./install.sh
           make initialize init
           pip install -r docs/requirements.txt
           pip install -r requirements.txt
