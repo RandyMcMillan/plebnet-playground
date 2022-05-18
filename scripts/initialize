@@ -74,7 +74,8 @@ if hash brew 2>/dev/null; then
     if ! hash docker 2>/dev/null; then
         brew install --cask docker
         brew install docker
-        brew link docker
+        rm '/usr/local/etc/bash_completion.d/docker'
+        brew link --overwrite docker
     fi
     if ! hash docker-compose 2>/dev/null; then
         brew install docker-compose
