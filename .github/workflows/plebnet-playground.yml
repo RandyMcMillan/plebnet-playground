@@ -47,21 +47,21 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-      - name: make init venv install.sh uninstall.sh
         uses: actions/checkout@v2
-      - name: make venv && install.sh make help report
+      - name: make super init initialize venv install.sh help report uninstall.sh
         run: |
+          make super
           make init initialize
           make venv && . .venv/bin/activate
           ./install.sh
           make help report
           ./uninstall.sh
-      - name: make initialize, venv, init, build, install
+      - name: make super install-cluster build install
         run: |
+          make super
           make install-cluster
           make build nocache=true
           make build para=true
-          make install-cluster
           make install verbose=true
           # blocknotify | jq . & exit
       - name: play
@@ -89,5 +89,8 @@ jobs:
 
       - name: uninstall
         run: |
+          make super
+          # make prune-cluster
+          # make prune-playground
           make uninstall
 
