@@ -12,6 +12,9 @@
 		 make build para=true            parallelized build
 		 make install
 		                                 services=bitcoind,lnd,lndg,rtl,thunderhub,docs,tor,dashboard,notebook
+
+		 make install-cluster
+
 		 make run
 		                                 nocache=true verbose=true
 
