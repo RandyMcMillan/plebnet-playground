@@ -238,6 +238,9 @@ help:
 	@echo '		 make build para=true            parallelized build'
 	@echo '		 make install'
 	@echo '		                                 services=bitcoind,lnd,lndg,rtl,thunderhub,docs,tor,dashboard,notebook'
+	@echo ''
+	@echo '		 make install-cluster'
+	@echo ''
 	@echo '		 make run'
 	@echo '		                                 nocache=true verbose=true'
 	@echo ''
@@ -405,9 +408,11 @@ install-cluster: venv
 uninstall:
 	bash -c './uninstall.sh $(TRIPLET)'
 #######################
-.PHONY: run
+.PHONY: run run-all
 run: docs init
 	$(DOCKER_COMPOSE) $(VERBOSE) $(NOCACHE) up --remove-orphans &
+run-all: install-cluster run
+
 #######################
 .PHONY: build
 build: init
