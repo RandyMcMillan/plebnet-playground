@@ -25,22 +25,21 @@ python plebnet_generate.py TRIPLET=x86_64-linux-gnu bitcoind=$1 lnd=$1 tor=$torc
 
 #Remove
 docker compose down || docker-compose down
-sudo -s chown -R $(id -u) *
+# sudo -s chown -R $(id -u) *
 sudo -s rm -rf volumes
 
 #Create Datafile
 sudo -s mkdir volumes
 
-sudo -s chown -R $(id -u) *
+# sudo -s chown -R $(id -u) *
 declare n=$1
 for (( i=0; i<=n-1; i++ ))
 do
     echo $i
     mkdir -p volumes/lnd_datadir_$i
     mkdir -p volumes/bitcoin_datadir_$i
-
-#    mkdir volumes/tor_torrcdir_1
 done
+
 for (( i=0; i<=torcount; i++ ))
 do
     echo $i
@@ -64,5 +63,3 @@ done
 
 docker compose build --parallel --build-arg TRIPLET=$TRIPLET || docker-compose build --parallel --build-arg TRIPLET=$TRIPLET
 docker compose up --remove-orphans -d || docker-compose up --remove-orphans -d
-
-
