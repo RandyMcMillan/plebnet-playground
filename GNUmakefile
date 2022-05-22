@@ -374,6 +374,8 @@ ifneq ($(shell id -u),0)
 	@echo
 endif
 
+	mkdir -p volumes
+	mkdir -p cluster/volumes
 	chown -R $(shell id -u) *                 || echo
 	chown -R $(shell id -u) scripts           || echo
 	chown -R $(shell id -u) volumes           || echo
