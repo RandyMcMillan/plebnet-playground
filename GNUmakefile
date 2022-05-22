@@ -374,13 +374,15 @@ ifneq ($(shell id -u),0)
 	@echo
 endif
 
+	mkdir -p volumes
+	mkdir -p cluster/volumes
 	chown -R $(shell id -u) *                 || echo
 	chown -R $(shell id -u) scripts           || echo
 	chown -R $(shell id -u) volumes           || echo
 	chown -R $(shell id -u) cluster           || echo
 	chown -R $(shell id -u) cluster/volumes   || echo
 
-	pushd scripts > /dev/null; for string in *; do sudo chmod -R o+rwx /usr/local/bin/$$string; done; popd  > /dev/null
+	pushd scripts > /dev/null; for string in *; do sudo chmod -R o+rwx /usr/local/bin/$$string; done; popd  > /dev/null || echo
 	install -v -m=o+rwx $(PWD)/scripts/*  /usr/local/bin/
 	install -v -m=o+rwx $(PWD)/getcoins.py  /usr/local/bin/play-getcoins
 	$(PYTHON3) -m pip install --upgrade pip
