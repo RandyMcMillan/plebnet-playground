@@ -51,7 +51,7 @@ jobs:
         uses: actions/checkout@v2
       - name: make venv && install.sh make help report
         run: |
-          make init initialize
+          make initialize init
           make venv && . .venv/bin/activate
           ./install.sh
           make help report
