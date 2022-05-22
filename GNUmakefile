@@ -360,7 +360,7 @@ test-venv:
 	);
 .PHONY: init
 .SILENT:
-init:
+init: venv
 
 ifneq ($(shell id -u),0)
 	@echo
