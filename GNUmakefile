@@ -369,17 +369,12 @@ ifneq ($(shell id -u),0)
 	@echo 'If permissions issue...'
 	@echo
 endif
-	sudo -s chown -R $(shell id -u) *
-	sudo -s chown -R $(shell id -u) scripts/*
-	sudo -s chown -R $(shell id -u) volumes/*  || echo
-	sudo -s chown -R $(shell id -u) cluster/*
+	sudo -s chown -R $(shell id -u) * || echo
+	sudo -s chown -R $(shell id -u) scripts || echo
+	sudo -s chown -R $(shell id -u) volumes  || echo
+	sudo -s chown -R $(shell id -u) cluster || echo
 	sudo -s chown -R $(shell id -u) cluster/volumes/* || echo
 
-	chmod -R o+rwx *
-	chmod -R o+rwx scripts/*
-
-	# chmod -R o+rwx /usr/local/bin
-	# pushd scripts > /dev/null; for string in *; do echo $$string; done; popd > /dev/null
 	pushd scripts > /dev/null; for string in *; do sudo chmod -R o+rwx /usr/local/bin/$$string; done; popd  > /dev/null
 	install -v $(PWD)/scripts/*  /usr/local/bin/
 	install -v $(PWD)/getcoins.py  /usr/local/bin/play-getcoins
