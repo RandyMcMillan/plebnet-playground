@@ -59,15 +59,13 @@ jobs:
 
       - name: make venv && install.sh make help report
         run: |
-          make init initialize
+          make initialize init
           make venv && . .venv/bin/activate
           ./install.sh
           make help report
-          ./uninstall.sh
+          # ./uninstall.sh
       - name: make initialize, venv, init, build, install
         run: |
-          make install-cluster
-          make build nocache=true
           make build para=true
           make install-cluster
           make install verbose=true
@@ -83,9 +81,6 @@ jobs:
           play bitcoin
           play bitcoin top
           play bitcoin netinfo 5
-          play bitcoin gettxoutsetinfo
-          play bitcoin getmininginfo
-          play bitcoin 'bitcoin-cli getblockhash 1000'
       - name: lnd-commands
         run: |
           # play defaults to the lnd container
