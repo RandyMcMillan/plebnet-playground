@@ -48,12 +48,14 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - uses: actions/checkout@v2
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        # Ignore the failure of a step and avoid terminating the job.
+        continue-on-error: true
       - uses: actions/setup-python@v2
       - uses: syphar/restore-virtualenv@v1
         id: cache-virtualenv
       - uses: syphar/restore-pip-download-cache@v1
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-
       - run: pip install -r requirements.txt
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
