@@ -528,13 +528,13 @@ prune-cluster:
 #######################
 .PHONY: push
 push:
-	@echo 'push'
-	#bash -c "git reset --soft HEAD~1 || echo failed to add docs..."
-	#bash -c "git add README.md docker/README.md docker/DOCKER.md *.md docker/*.md || echo failed to add docs..."
-	#bash -c "git commit --amend --no-edit --allow-empty -m '$(GIT_HASH)'          || echo failed to commit --amend --no-edit"
-	#bash -c "git commit         --no-edit --allow-empty -m '$(GIT_PREVIOUS_HASH)' || echo failed to commit --amend --no-edit"
-	bash -c "git push -f --all git@github.com:$(GIT_PROFILE)/$(PROJECT_NAME).git || echo failed to push docs"
-	bash -c "git push -f --all git@github.com:bitcoincore-dev/statoshi.host.git || echo failed to push to statoshi.host"
+	@echo push
+	git checkout -b $(TIME)/$(GIT_PREVIOUS_HASH)/$(GIT_HASH)
+	git push --set-upstream origin $(TIME)/$(GIT_PREVIOUS_HASH)/$(GIT_HASH)
+	git add docs
+	git commit --amend --no-edit --allow-empty || echo failed to commit --amend --no-edit
+	git push -f origin $(TIME)/$(GIT_PREVIOUS_HASH)/$(GIT_HASH):$(TIME)/$(GIT_PREVIOUS_HASH)/$(GIT_HASH)
+
 .PHONY: push-docs
 push-docs: statoshi-docs push
 	@echo 'push-docs'
