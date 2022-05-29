@@ -390,8 +390,8 @@ endif
 
 	$(PYTHON3) -m pip install --upgrade pip
 	$(PYTHON3) -m pip install -q omegaconf
-	$(PYTHON3) -m pip install -q -r requirements.txt
-	pushd docs > /dev/null && $(PYTHON3) -m pip install -q -r requirements.txt && popd  > /dev/null
+	#$(PYTHON3) -m pip install -q -r requirements.txt
+	pushd mkdocs > /dev/null && $(PYTHON3) -m pip install -q -r requirements.txt && popd  > /dev/null
 	$(PYTHON3) plebnet_generate.py TRIPLET=$(TRIPLET) services=$(SERVICES)
 #######################
 .PHONY: blocknotify
@@ -429,29 +429,29 @@ btcd:
 docs: init
 	@echo "Use 'make docs nocache=true' to force docs rebuild..."
 
-	echo "## MAKE COMMAND" >> MAKE.md
-	echo '```' > MAKE.md
-	make >> MAKE.md
-	echo '```' >> MAKE.md
+	echo "## MAKE COMMAND" >> mkdocs/MAKE.md
+	echo '```' > mkdocs/MAKE.md
+	make >> mkdocs/MAKE.md
+	echo '```' >> mkdocs/MAKE.md
 
-	echo "## PLAY COMMAND" > PLAY.md
-	echo '```' >> PLAY.md
-	play >> PLAY.md
-	echo '```' >> PLAY.md
+	echo "## PLAY COMMAND" > mkdocs/PLAY.md
+	echo '```' >> mkdocs/PLAY.md
+	play >> mkdocs/PLAY.md
+	echo '```' >> mkdocs/PLAY.md
 #
-	echo "## PLAY-BITCOIN COMMAND" >> PLAY.md
-	echo '```' >> PLAY.md
-	play-bitcoin >> PLAY.md
-	echo '```' >> PLAY.md
+	echo "## PLAY-BITCOIN COMMAND" >> mkdocs/PLAY.md
+	echo '```' >> mkdocs/PLAY.md
+	play-bitcoin >> mkdocs/PLAY.md
+	echo '```' >> mkdocs/PLAY.md
 #
-	echo "## PLAY-LND COMMAND" >> PLAY.md
-	echo '```' >> PLAY.md
-	play-lnd >> PLAY.md
-	echo '```' >> PLAY.md
+	echo "## PLAY-LND COMMAND" >> mkdocs/PLAY.md
+	echo '```' >> mkdocs/PLAY.md
+	play-lnd >> mkdocs/PLAY.md
+	echo '```' >> mkdocs/PLAY.md
 
-	install -v README.md docs/index.md
-	sed 's/images/.\/images/' README.md > docs/index.md
-	cp -R ./images ./docs
+	install -v mkdocs/README.md mkdocs/index.md
+	sed 's/images/.\/images/' mkdocs/README.md > mkdocs/index.md
+	cp -R mkdocs/images docs
 	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) docs
 #######################
 .PHONY: install-python38-sh
