@@ -1,4 +1,4 @@
-![create lnd wallet image](images/PlebnetPlayground.png)
+![create lnd wallet image](./images/PlebnetPlayground.png)
 # Plebnet Playground Sandbox Docker Package
 [![plebnet-playground](https://github.com/PLEBNET-PLAYGROUND/plebnet-playground-docker/actions/workflows/plebnet-playground.yml/badge.svg)](https://github.com/PLEBNET-PLAYGROUND/plebnet-playground-docker/actions/workflows/plebnet-playground.yml)
 
@@ -222,7 +222,7 @@ By default only the playground nodes are visualized. However, you can also visua
 USE_TEST_DATA=TRUE docker-compose up dashboard
 ```
 
-![Plebnet Dashboard](images/plebnet_dashboard.png)
+![Plebnet Dashboard](./images/plebnet_dashboard.png)
 
 ## Additional reference material
 
