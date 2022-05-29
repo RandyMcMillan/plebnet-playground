@@ -3,14 +3,14 @@ version: "3.4"
 networks: {}
 services:
   bitcoind:
-    build: 
+    build:
       context: ./bitcoin-signet
       dockerfile: Dockerfile
       args:
         - TRIPLET=${TRIPLET}
     links:
     - tor
-    depends_on: 
+    depends_on:
     - tor
     restart: unless-stopped
     container_name: playground-bitcoind
@@ -31,7 +31,7 @@ services:
     links:
     - bitcoind
     - tor
-    depends_on: 
+    depends_on:
     - bitcoind
     - tor
     environment:
@@ -48,7 +48,7 @@ services:
       rpchost: 'playground-bitcoind'
     restart: unless-stopped
     container_name: playground-lnd
-    build: 
+    build:
       context: ./lnd-signet
       dockerfile: Dockerfile
     expose:
@@ -69,7 +69,7 @@ services:
     links:
     - bitcoind
     - tor
-    depends_on: 
+    depends_on:
     - bitcoind
     - tor
     environment:
@@ -80,7 +80,7 @@ services:
       LIGHTNINGD_PORT: '9736'
     restart: unless-stopped
     container_name: playground-cln
-    build: 
+    build:
       context: ./cln-signet
       dockerfile: Dockerfile
     expose:
@@ -112,10 +112,10 @@ services:
           target: /var/lib/tor/hidden_services
   thunderhub:
     container_name: playground-thub
-    depends_on: 
+    depends_on:
       - lnd
       - bitcoind
-    links: 
+    links:
       - bitcoind
       - lnd
     build:
@@ -124,7 +124,7 @@ services:
     restart: unless-stopped
     stop_signal: SIGKILL
     environment:
-      NO_VERSION_CHECK: "true" 
+      NO_VERSION_CHECK: "true"
       ACCOUNT_CONFIG_PATH: '/data/thubConfig.yaml'
       LOG_LEVEL: debug
     volumes:
@@ -136,17 +136,17 @@ services:
         source: ${oc.env:PWD}/volumes/thub_datadir
         target: /data
     ports:
-      - '3001:3000'  
+      - '3001:3000'
   rtl:
       container_name: playground-rtl
       links:
-        - lnd      
-        - bitcoind 
-      depends_on: 
         - lnd
         - bitcoind
-      restart: unless-stopped 
-      environment: 
+      depends_on:
+        - lnd
+        - bitcoind
+      restart: unless-stopped
+      environment:
         LND_SERVER_URL: https://playground-lnd:8080/v1
         MACAROON_PATH: /root/.lnd/data/chain/bitcoin/signet
         RTL_CONFIG_PATH: /data/
@@ -159,7 +159,7 @@ services:
         LN_IMPLEMENTATION: LND
       ports:
       - "3000:3000"
-      image: shahanafarooqui/rtl:0.11.0 
+      image: shahanafarooqui/rtl:0.11.0
       volumes:
         - type: bind
           source: ${oc.env:PWD}/volumes/lnd_datadir
@@ -174,7 +174,7 @@ services:
           target: /data
   notebook:
     container_name: playground-notebook
-    links: 
+    links:
       - lnd
       - bitcoind
     depends_on:
@@ -210,10 +210,10 @@ services:
       - chmod +x /dashboard/jupyter_run.sh && /dashboard/jupyter_run.sh
 #  dashboard:
 #    container_name: playground-dashboard
-#    links: 
-#      - lnd      
-#      - bitcoind 
-#    depends_on: 
+#    links:
+#      - lnd
+#      - bitcoind
+#    depends_on:
 #      - lnd
 #      - bitcoind
 #    restart: unless-stopped
@@ -240,43 +240,49 @@ services:
 #    command:
 #      - python
 #      - dashboard.py
-  lndg:  
-    image: ghcr.io/cryptosharks131/lndg:latest  
+  lndg:
+    image: ghcr.io/cryptosharks131/lndg:latest
     container_name: playground-lndg
-    depends_on:  
-      - lnd  
-    volumes:  
+    depends_on:
+      - lnd
+    volumes:
       - ${oc.env:PWD}/volumes/lnd_datadir:/root/.lnd:ro
       - ${oc.env:PWD}/volumes/lndg_datadir:/lndg/data:rw
-    command:  
-      - sh  
-      - -c  
-      - python initialize.py -net 'signet' -server 'playground-lnd:10009' -d && sleep 20 && supervisord && python manage.py runserver 0.0.0.0:8000  
-    ports:  
+    command:
+      - sh
+      - -c
+      - python initialize.py -net 'signet' -server 'playground-lnd:10009' -d && sleep 20 && supervisord && python manage.py runserver 0.0.0.0:8000
+    ports:
       - 8889:8000
+
   docs:
-    links:
-    - tor
-    depends_on: 
-    - tor
-    restart: unless-stopped
     container_name: playground-docs
-    environment:
-      - TRIPLET=${TRIPLET}
-    build: 
-      context: ${oc.env:PWD}/docs
-      dockerfile: Dockerfile
-      args:
-        - TRIPLET=${TRIPLET}
+    links:
+      - tor
+      - lnd
+      - bitcoind
+    depends_on:
+      - tor
+      - lnd
+      - bitcoind
+    restart: unless-stopped
     expose:
     - "8000"
     - "8008"
     ports:
-    - "8008:8000"
+    - "8000:8000"
+    image: docker.io/minidocks/mkdocs:latest
+    build:
+      context: .
+      dockerfile: ./docs/Dockerfile
     volumes:
       - type: bind
+        source: .
+        target: /app
+        read_only: true
+      - type: bind
         source: ${oc.env:PWD}/docs
-        target: /docs
+
   db:
     image: postgres:14.3
     restart: always
@@ -292,7 +298,7 @@ services:
       - type: bind
         source: ${oc.env:PWD}/volumes/postgres_datadir
         target: /data
- 
+
   adminer:
     links:
      - db
@@ -321,7 +327,7 @@ services:
     restart: unless-stopped
     stop_signal: SIGKILL
     environment:
-        NO_VERSION_CHECK: "true" 
+        NO_VERSION_CHECK: "true"
         ACCOUNT_CONFIG_PATH: '/data/lnbitsConfig.yaml'
         LOG_LEVEL: debug
     volumes:
@@ -333,4 +339,4 @@ services:
           source: ${oc.env:PWD}/volumes/lnbits_datadir
           target: /data
     ports:
-        - '5001:5000'  
+        - '5001:5000'

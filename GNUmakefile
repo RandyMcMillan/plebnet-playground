@@ -449,11 +449,9 @@ docs: init
 	play-lnd >> PLAY.md
 	echo '```' >> PLAY.md
 
-	install -v README.md docs/docs/index.md
-	install -v MAKE.md docs/docs/MAKE.md
-	install -v PLAY.md docs/docs/PLAY.md
-	sed 's/images/.\/images/' README.md > docs/docs/index.md
-	cp -R ./images ./docs/docs
+	install -v README.md docs/index.md
+	sed 's/images/.\/images/' README.md > docs/index.md
+	cp -R ./images ./docs
 	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) docs
 #######################
 .PHONY: install-python38-sh
