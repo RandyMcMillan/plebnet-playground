@@ -48,7 +48,7 @@ mkdir -p volumes/tor_torrcdir
 mkdir -p volumes/lndg_datadir
 mkdir -p volumes/postgres_datadir
 mkdir -p volumes/lnbits_datadir
-
+mkdir -p volumes/docs_datadir
 
 #REF: https://docs.docker.com/engine/install/linux-postinstall
 while ! docker system info > /dev/null 2>&1; do
