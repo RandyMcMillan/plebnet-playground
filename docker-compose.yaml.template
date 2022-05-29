@@ -270,18 +270,21 @@ services:
     - "8000"
     - "8008"
     ports:
-    - "8000:8000"
-    image: docker.io/minidocks/mkdocs:latest
+    - "8008:8000"
+    image: playground-docker-docs
     build:
       context: .
-      dockerfile: ./docs/Dockerfile
+      dockerfile: ${oc.env:PWD}/mkdocs/Dockerfile
     volumes:
       - type: bind
-        source: .
-        target: /app
-        read_only: true
+        source: ${oc.env:PWD}
+        target: /root
+      - type: bind
+        source: ${oc.env:PWD}/mkdocs
+        target: /root/mkdocs
       - type: bind
         source: ${oc.env:PWD}/docs
+        target: /root/docs
 
   db:
     image: postgres:14.3
