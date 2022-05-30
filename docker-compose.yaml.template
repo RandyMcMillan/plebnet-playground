@@ -271,7 +271,6 @@ services:
     - "8008"
     ports:
     - "8008:8000"
-    image: playground-docker-docs
     build:
       context: .
       dockerfile: ${oc.env:PWD}/mkdocs/Dockerfile

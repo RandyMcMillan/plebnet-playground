@@ -229,37 +229,47 @@ export PACKAGE_PREFIX
 
 .PHONY: help
 help:## print verbose help
-	@echo 'make [COMMAND] [EXTRA_ARGUMENTS]	'
+	@echo 'make	 [COMMAND]			[EXTRA_ARGUMENTS]'
 	@echo ''
 	#@echo ''
-	@echo 'make '
-	@echo '	 make all                        install and run playground and cluster'
-	@echo '	 make help                       print help'
-	@echo '	 make report                     print environment variables'
-	@echo '	 make initialize                 install dependencies - ubuntu/macOS'
-	@echo '	 make init                       initialize basic dependencies'
-	@echo '	 make build'
-	@echo '	 make build para=true            parallelized build'
-	@echo '	 make install'
-	@echo '	                                 services=bitcoind,lnd,lndg,rtl,thunderhub,docs,tor,dashboard,notebook'
-	@echo '	 make run'
-	@echo '	                                 nocache=true verbose=true'
+	@echo 'make'
+	@echo '	 help                       print verbose help'
+	@echo ''
+	@echo '	 report                     print environment variables'
+	@echo ''
+	@echo '	 all                        install and run the playground'
+	@echo ''
+	@echo '	 venv'
+	@echo '	 test-venv'
+	@echo ''
+	@echo '	 setup'
+	@echo '	 init                       initialize basic dependencies'
+	@echo '	 initialize                 install dependencies - ubuntu/macOS'
+	@echo ''
+	@echo '	 build'
+	@echo '	 build para=true            parallelized build'
+	@echo '	                            nocache=true verbose=true'
+	@echo ''
+	@echo '	 install'
+	@echo '	 install                    services=rtl,thunderhub'
+	@echo '	 install-cluster            run a cluster of nodes'
+	@echo ''
+	@echo '	 run'
 	@echo ''
 	@echo '	[DEV ENVIRONMENT]:	'
 	@echo ''
 #	@echo '	 make shell            compiling environment on host machine'
-	@echo '	 make signin profile=gh-user     ~/GH_TOKEN.txt required from github.com'
+	@echo '	 signin profile=gh-user     ~/GH_TOKEN.txt required from github.com'
 #	@echo '	 make header package-header'
-	@echo '	 make build'
+	@echo '	 build'
 #	@echo '	 make build package-statoshi'
-	@echo '	 make package-all'
+	@echo '	 package-all'
 	@echo ''
-	@echo '	 make install-python38-sh'
-	@echo '	 make install-python39-sh'
 	@echo ''
-#	@echo '	[EXTRA_ARGUMENTS]:	set build variables	'
+	@echo '	[EXTRA_ARGUMENTS]:	set build variables	'
 #	@echo ''
-#	@echo '	nocache=true'
+	@echo '	 nocache=true'
+	@echo '	 verbose=true'
 #	@echo '	            	add --no-cache to docker command and apk add $(NOCACHE)'
 #	@echo '	port=integer'
 #	@echo '	            	set PUBLIC_PORT default 80'
@@ -339,7 +349,7 @@ export ORIGIN_DIR
 export TARGET_DIR
 
 .PHONY: super
-super:## switch to super user
+super:
 ifneq ($(shell id -u),0)
 	@echo switch to superuser
 	@echo cd $(TARGET_DIR)
@@ -347,7 +357,7 @@ ifneq ($(shell id -u),0)
 #.ONESHELL:
 	sudo -s
 endif
-all: initialize init install-cluster install## all
+all: initialize init install-cluster install## install and run the playground
 .PHONY: venv
 venv:## create python3 virtualenv .venv
 	test -d .venv || $(PYTHON3) -m virtualenv .venv
@@ -369,7 +379,7 @@ test-venv:## test virutalenv .venv
 .PHONY: init setup
 .SILENT:
 setup: init venv## basic setup
-init:
+init:## init
 
 ifneq ($(shell id -u),0)
 	@echo
@@ -414,15 +424,15 @@ install-cluster:## create cluster/docker-compose.yml and run playground-cluster
 	bash -c 'pushd cluster && ./up-generic.sh 5 && popd'
 #######################
 .PHONY: uninstall
-uninstall:
+uninstall:## uninstall
 	bash -c './uninstall.sh $(TRIPLET)'
 #######################
 .PHONY: run
-run: docs init
+run: docs init## run
 	$(DOCKER_COMPOSE) $(VERBOSE) $(NOCACHE) up --remove-orphans &
 #######################
 .PHONY: build
-build: init
+build: init## build
 	docker pull  shahanafarooqui/rtl:0.11.0
 	$(DOCKER_COMPOSE) $(VERBOSE) build --pull $(PARALLEL) --no-rm $(NOCACHE)
 #######################
@@ -430,33 +440,35 @@ build: init
 btcd:
 	bash -c "cd btcd && make btcd && cd .."
 .PHONY: docs
-docs: init
-	@echo "Use 'make docs nocache=true' to force docs rebuild..."
-
-	echo "# MAKE COMMAND" > mkdocs/MAKE.md
-	echo '## Usage' >> mkdocs/MAKE.md
-	make help >> mkdocs/MAKE.md
-	echo '```' >> mkdocs/MAKE.md
-
-	echo "## PLAY COMMAND" > mkdocs/PLAY.md
-	echo '```' >> mkdocs/PLAY.md
-	play >> mkdocs/PLAY.md
-	echo '```' >> mkdocs/PLAY.md
+docs: init## docs
+	#@echo "Use 'make docs nocache=true' to force docs rebuild..."
+	#@echo "#" > mkdocs/MAKE.md
+	#@echo "# make" > mkdocs/MAKE.md
+	#@echo '## Usage	' >> mkdocs/MAKE.md
+	#@echo '```' >> mkdocs/MAKE.md
+	#make help >> mkdocs/MAKE.md
+	#@echo '```' >> mkdocs/MAKE.md
+	#@echo "# play" > mkdocs/PLAY.md
+	#@echo '## Usage	' >> mkdocs/PLAY.md
+	#@echo '```' >> mkdocs/PLAY.md
+	#play >> mkdocs/PLAY.md
+	#@echo '```' >> mkdocs/PLAY.md
 #
-	echo "## PLAY-BITCOIN COMMAND" >> mkdocs/PLAY.md
-	echo '```' >> mkdocs/PLAY.md
-	play-bitcoin >> mkdocs/PLAY.md
-	echo '```' >> mkdocs/PLAY.md
+	#@echo "## play-bitcoin" >> mkdocs/PLAY.md
+	#@echo '```' >> mkdocs/PLAY.md
+	#play-bitcoin >> mkdocs/PLAY.md
+	#@echo '```' >> mkdocs/PLAY.md
 #
-	echo "## PLAY-LND COMMAND" >> mkdocs/PLAY.md
-	echo '```' >> mkdocs/PLAY.md
-	play-lnd >> mkdocs/PLAY.md
-	echo '```' >> mkdocs/PLAY.md
+	#@echo "## play-lnd" >> mkdocs/PLAY.md
+	#@echo '```' >> mkdocs/PLAY.md
+	#play-lnd >> mkdocs/PLAY.md
+	#@echo '```' >> mkdocs/PLAY.md
 
 	install -v mkdocs/README.md mkdocs/index.md
 	sed 's/images/.\/images/' mkdocs/README.md > mkdocs/index.md
 	cp -R mkdocs/images docs
 	$(DOCKER_COMPOSE) $(VERBOSE) build $(NOCACHE) docs
+	# $(DOCKER_COMPOSE) $(VERBOSE) run -l="playground-docs" -dit --publish 0.0.0.0:8008:8000 docs
 #######################
 .PHONY: install-python38-sh
 install-python38-sh:
@@ -482,64 +494,52 @@ install-python39-sh: init
 #	@echo 'Give grafana a few minutes to set up...'
 #	@echo 'http://localhost:$(PUBLIC_PORT)'
 ########################
-.PHONY: extract
-extract:
-	@echo 'extract'
-	#extract TODO CREATE PACKAGE for distribution
-	sed '$d' $(DOCKERFILE) | sed '$d' | sed '$d' > $(DOCKERFILE_EXTRACT)
-	docker build -f $(DOCKERFILE_EXTRACT) --rm -t $(DOCKERFILE_EXTRACT) .
-	docker run --name $(DOCKERFILE_EXTRACT) $(DOCKERFILE_EXTRACT) /bin/true
-	docker rm $(DOCKERFILE_EXTRACT)
-	rm -f  $(DOCKERFILE_EXTRACT)
-#######################
-.PHONY: torproxy
-torproxy:
-	@echo ''
-	#REF: https://hub.docker.com/r/dperson/torproxy
-	#bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -p 9051:9051 -d dperson/torproxy'
-	@echo ''
-ifneq ($(shell id -u),0)
-	bash -c 'sudo make torproxy user=root &'
-endif
-ifeq ($(CMD_ARGUMENTS),)
-	$(DOCKER_COMPOSE) $(VERBOSE) -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118 --publish 9050:9050  --publish 9051:9051 --rm torproxy
-else
-	$(DOCKER_COMPOSE) $(VERBOSE) -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118 --publish 9050:9050  --publish 9051:9051 --rm torproxy sh -c "$(CMD_ARGUMENTS)"
-endif
-	@echo ''
+#.PHONY: extract
+#extract:
+#	@echo 'extract'
+#	#extract TODO CREATE PACKAGE for distribution
+#	sed '$d' $(DOCKERFILE) | sed '$d' | sed '$d' > $(DOCKERFILE_EXTRACT)
+#	docker build -f $(DOCKERFILE_EXTRACT) --rm -t $(DOCKERFILE_EXTRACT) .
+#	docker run --name $(DOCKERFILE_EXTRACT) $(DOCKERFILE_EXTRACT) /bin/true
+#	docker rm $(DOCKERFILE_EXTRACT)
+#	rm -f  $(DOCKERFILE_EXTRACT)
+########################
+#.PHONY: torproxy
+#torproxy:
+#	@echo ''
+#	#REF: https://hub.docker.com/r/dperson/torproxy
+#	#bash -c 'docker run -it -p 8118:8118 -p 9050:9050 -p 9051:9051 -d dperson/torproxy'
+#	@echo ''
+#ifneq ($(shell id -u),0)
+#	bash -c 'sudo make torproxy user=root &'
+#endif
+#ifeq ($(CMD_ARGUMENTS),)
+#	$(DOCKER_COMPOSE) $(VERBOSE) -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118 --publish 9050:9050  --publish 9051:9051 --rm torproxy
+#else
+#	$(DOCKER_COMPOSE) $(VERBOSE) -f docker-compose.yml -p $(PROJECT_NAME)_$(HOST_UID) run --publish 8118:8118 --publish 9050:9050  --publish 9051:9051 --rm torproxy sh -c "$(CMD_ARGUMENTS)"
+#endif
+#	@echo ''
 #######################
 .PHONY: clean
-clean:
+clean:## remove images
 	# remove created images
 	@$(DOCKER_COMPOSE) -p $(PROJECT_NAME) down --remove-orphans --rmi all 2>/dev/null \
 	&& echo 'Image(s) for "$(PROJECT_NAME)" removed.' \
 	|| echo 'Image(s) for "$(PROJECT_NAME)" already removed.'
 #######################
 .PHONY: prune
-prune:
+prune:## docker system prune -af - use with caution!
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) down
 	docker system prune -af &
 #######################
 .PHONY: prune-network
-prune-playground:
+prune-playground:## prune-playground
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) down
 	docker network rm plebnet-playground-docker* 2>/dev/null || echo
-prune-cluster:
-	$(DOCKER_COMPOSE) -p cluster down
+prune-cluster:## prune-cluster
+	$(DOCKER_COMPOSE) -p plebnet-playground-cluster down
 	docker network rm cluster* 2>/dev/null || echo
 #######################
-.PHONY: push
-push:
-	@echo push
-	git checkout -b $(TIME)/$(GIT_PREVIOUS_HASH)/$(GIT_HASH)
-	git push --set-upstream origin $(TIME)/$(GIT_PREVIOUS_HASH)/$(GIT_HASH)
-	git add docs
-	git commit --amend --no-edit --allow-empty || echo failed to commit --amend --no-edit
-	git push -f origin $(TIME)/$(GIT_PREVIOUS_HASH)/$(GIT_HASH):$(TIME)/$(GIT_PREVIOUS_HASH)/$(GIT_HASH)
-
-.PHONY: push-docs
-push-docs: statoshi-docs push
-	@echo 'push-docs'
 
 SIGNIN=randymcmillan
 export SIGNIN
@@ -569,6 +569,8 @@ package-plebnet: signin
 	bash -c 'docker push                              $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/tor-$(TRIPLET)/$(HOST_USER):$(TIME) || echo skip tor'
 	bash -c 'docker tag  $(PROJECT_NAME)_lnd          $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/lnd-$(TRIPLET)/$(HOST_USER):$(TIME) || echo skip lnd'
 	bash -c 'docker push                              $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/lnd-$(TRIPLET)/$(HOST_USER):$(TIME) || echo skip lnd'
+	bash -c 'docker tag  $(PROJECT_NAME)_cln          $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/cln-$(TRIPLET)/$(HOST_USER):$(TIME) || echo skip lnd'
+	bash -c 'docker push                              $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/cln-$(TRIPLET)/$(HOST_USER):$(TIME) || echo skip lnd'
 	bash -c 'docker tag  shahanafarooqui/rtl:0.11.0   $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/rtl-$(TRIPLET)/$(HOST_USER):$(TIME) || echo skip rtl'
 	bash -c 'docker push                              $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/rtl-$(TRIPLET)/$(HOST_USER):$(TIME) || echo skip rtl'
 

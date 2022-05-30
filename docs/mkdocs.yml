@@ -94,6 +94,8 @@ theme:
               - "*.pdf"
               - "*.gz"
               - "*.asciidoc"
+              - mkdocs/MAKE.md
+              - mkdocs/PLAY.md
               - worklogs/asherp.md
           regex:
               - '.*\.(tmp|bin|tar)$'
@@ -126,6 +128,7 @@ theme:
               permalink: true
 
     # Page tree
+    # NOTE: `make docs` modifies the docs/images links
     nav:
         - Home: index.md
         - Plebnet Wiki: https://plebnet.wiki/wiki/Main_Page
@@ -138,5 +141,9 @@ theme:
 
     # Development
     watch:
-        - .
-        - docs
+        - mkdocs
+        - mkdocs/mkdocs.yml
+        - mkdocs/README.md
+        - GNUmakefile
+        - mkdocs/MAKE.md
+        - mkdocs/PLAY.md

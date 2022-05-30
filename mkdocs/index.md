@@ -1,51 +1,67 @@
 ![create lnd wallet image](./images/PlebnetPlayground.png)
+
 # Plebnet Playground Sandbox Docker Package
 [![plebnet-playground](https://github.com/PLEBNET-PLAYGROUND/plebnet-playground-docker/actions/workflows/plebnet-playground.yml/badge.svg)](https://github.com/PLEBNET-PLAYGROUND/plebnet-playground-docker/actions/workflows/plebnet-playground.yml)
 
-This package will setup a bitcoind, lnd, and tor daemon that will connect to the Plebnet Playground Sandbox (Signet) Chain. This allows users to use and test bitcoin and lightning technologies without the financial risk involved with running on the mainnet chain. RTL (Ride The Lightning) and ThunderHub Web UI is also include to provide a more user friendly experience. 
-## Donate to Project
-***
+This package will setup a bitcoind, lnd, and tor daemon that will connect to the Plebnet Playground Sandbox (Signet) Chain. This allows users to use and test bitcoin and lightning technologies without the financial risk involved with running on the mainnet chain. RTL (Ride The Lightning) and ThunderHub Web UI is also include to provide a more user friendly experience.
+
+### Donate to Project
+
 - [Crowdfund for Playground + Plebnet.wiki running costs](https://btcpay.xenon.fun/apps/477A5RjNYiRcHWZUm4di4V6DFLnx/crowdfund)
 - [Direct Donation to Xenonfun](https://btcpay.xenon.fun/apps/41Cvr8bo3LgG42kmNyyDccvMzK2U/crowdfund)
-## Notes
-***
+
+### Notes
+
 - Package currently on works/tested on x64 Linux (Ubuntu specifically)
 - All data for containers are bind mapped into ```volumes/``` directory inside the clone repo for ease of editing them.
 - Bitcoind is not using tor, simply because it takes much longer to sync the chain, and while testing this slows me down. The playground signet chain is only around 1MB at time of writing, and takes my machine ~15 seconds to be fully synced clearnet, via tor it is taking minutes.
 - You will need to setup LND wallet from scratch, instructions below
 - PM [@xenonfun](https://t.me/xenonfun) on Telegram to get access to the Plebnet Playground Telegram group
 - All ports are completely exposed to local host, this is mostly to make it easy for end-users to tinker, and as the signet coins in the playground are worthless so there is little risk of hacking. You can modify the ```docker-compose.yaml``` should these cause conflicts.
-- For Windows users you will need to use something like git bash until we make some powershell scripts to provide cleaner functionality 
-## Basic Setup
-***
-### Clone Repo & Install Requirements
-***
+- For Windows users you will need to use something like git bash until we make some powershell scripts to provide cleaner functionality
 
+<HR>
+
+## Basic Setup
+
+### Clone Repo & Install Requirements
 
 If you already have *virtualenv* installed, great. If not, and you are new to using Python, see this article about why its recommended to use a
 [virtualenv](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/)
 
-
-```
+```bash
 git clone https://github.com/PLEBNET-PLAYGROUND/plebnet-playground-docker --config core.autocrlf=input
 cd plebnet-playground-docker
-pip3 install virtualenv 
-python3 -m venv venv 
+pip3 install virtualenv
+python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
-Follow [these instructions](https://docs.docker.com/compose/install/#install-compose) to install the `docker compose` subcommand on your system (Mac, Windows, Windows Server 2016, or Linux systems). 
+---
 
-### Supported System Architectures
+## Install `docker`
+#### Follow [these instructions](https://docs.docker.com/compose/install/#install-compose) to install `docker compose` on (Mac or Linux systems).
 
-| Architecture      | TRIPLET build-arg |
+or from the command line:
+
+```
+/bin/bash -c "$(curl -fsSL https://get.docker.com)"
+```
+
+---
+
+
+## Supported System Architectures
+
+| Architecture | TRIPLET build-arg |
 | ----------- | ----------- |
 |  Intel x64  | x86_64-linux-gnu |
 |  OSX 64-bit | aarch64-linux-gnu  |
 | ARM64 linux |  aarch64-linux-gnu |
 
 ### Services
+
 | Service      | Description  |
 | ----------- | ----------- |
 |  bitcoind | Bitcoin Core Daemon |
@@ -59,46 +75,40 @@ Follow [these instructions](https://docs.docker.com/compose/install/#install-com
 | dashboard |  Jupyter Dashboard |
 | lndg |  lndg Dashboard (available on port 8889) |
 
+## ```$``` COMMANDS
+
 ### Install and start all services (will autodetect platform)
-***
+
+## ```$ ./install.sh```
+
+#### Install and start just the `bitcoind`,`lnd` services (comma separate them)
 
 ```sh
-./install.sh   
-```
-
-### Install and start just the `bitcoind`,`lnd` services (comma separate them)
-```sh
-services=bitcoind,lnd ./install.sh   
+services=bitcoind,lnd ./install.sh
 ```
 
 ### Start containers
-***
-```
-docker-compose up -d
-```
+
+## ```$ docker-compose up -d ```
 
 ### Stop containers
-***
-```
-docker-compose stop
-```
+
+## ```$ docker-compose stop ```
 
 ### Full removal of Plebnet Playground (this deletes all data out of volumes directory)
-***
-```
-./uninstall.sh
-```
-***
 
-## [Make](MAKE.md) Command
+```$ ./uninstall.sh ```
 
-### Ubuntu Linux
+
+## ```$ make```
+
+#### Ubuntu Linux
 
 ```
 apt install make
 ```
 
-### MacOS
+#### MacOS
 
 #### [Change default shell to bash](https://www.howtogeek.com/444596/how-to-change-the-default-shell-to-bash-in-macos-catalina/)
 ```
@@ -112,25 +122,123 @@ chsh -s /bin/bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 ```
-brew install make docker-compose
+brew install make
+brew install docker-compose
 brew install --cask docker
 open /Applications/Docker.app
 ```
 
-## [Play](PLAY.md) Command
+
+### Usage
+```
+make	 [COMMAND]			[EXTRA_ARGUMENTS]
+
+make
+	 help                       print verbose help
+
+	 report                     print environment variables
+
+	 all                        install and run the playground
+
+	 venv
+	 test-venv
+
+	 setup
+	 init                       initialize basic dependencies
+	 initialize                 install dependencies - ubuntu/macOS
+
+	 build
+	 build para=true            parallelized build
+	                            nocache=true verbose=true
+
+	 install
+	 install                    services=rtl,thunderhub
+	 install-cluster            run a cluster of nodes
+
+	 run
+
+	[DEV ENVIRONMENT]:
+
+	 signin profile=gh-user     ~/GH_TOKEN.txt required from github.com
+	 build
+	 package-all
+
+
+	[EXTRA_ARGUMENTS]:	set build variables
+	 nocache=true
+	 verbose=true
+
+	[EXAMPLES]:
+
+	 make run nocache=true verbose=true
+
+	 make init && play help
 
 ```
-make
-make init
-make install (non-destructive)
-make install reset=true (destructive)
-play help
-play-bitcoin help
-play-lnd help
+
+## ```$ play```
+
 ```
-***
+play
+
+Examples:
+
+play
+play bitcoin
+play bitcoin id
+play lnd
+play lnd id
+
+play-getcoins -a $(play-lnd getnewaddress)
+
+```
+## ```$ play-bitcoin```
+
+```
+play-bitcoin id
+play-bitcoin top
+play-bitcoin ifconfig
+play-bitcoin iftop
+play-bitcoin netinfo 5
+play-bitcoin shell
+play-bitcoin start
+play-bitcoin stop
+
+play-bitcoin '<COMMAND>'
+play-bitcoin createwallet  playground-wallet
+play-bitcoin createwallet  <walletname>
+play-bitcoin listwallets
+play-bitcoin getnewaddress playground-wallet
+play-bitcoin getnewaddress <walletname>
+play-bitcoin getbalance
+play-bitcoin getbalances
+play-bitcoin gettxoutsetinfo
+
+play-bitcoin sendtoaddress playground-wallet $newaddress 0.01
+
+```
+## ```$ play-lnd```
+```
+play-lnd id
+play-lnd top
+play-lnd ifconfig
+play-lnd iftop
+play-lnd shell
+play-lnd start
+play-lnd stop
+
+play-lnd '<COMMAND>'
+play-lnd newaddress
+play-lnd walletbalance
+play-lnd total-balance
+play-lnd confirmed-balance
+play-lnd unconfirmed-balance
+
+play-getcoins -a $(play-lnd getnewaddress)
+```
 
 ## Aliases
+
 ```
 alias lncli='docker exec -it playground-lnd lncli --macaroonpath /root/.lnd/data/chain/bitcoin/signet/admin.macaroon '
 
@@ -176,7 +284,7 @@ alias bos="docker run -it --rm -v $PWD/volumes/bos_datadir:/home/node/.bos:rw --
 The wallet will automatically be made for you and use the default password  is ```12345678```
 You can change the password with the ```change-password-playground``` alias. If you do change your password make sure to update the ```unlock.password``` file with your new password.
 
- 
+
 ## Make your first peer with the seed node for Plebnet Playground Signet
 ***
 - ```connect-playground```
@@ -231,7 +339,7 @@ USE_TEST_DATA=TRUE docker-compose up dashboard
 - [Bitcoin Wiki](https://bitcoin.it)
 - [Lightning Wiki](https://lightningwiki.net/index.php/Main_Page)
 - [Plebnet Telegram](http://plebnet.org/)
-  
+
 ### Contributors
 - [Richard Safier](https://github.com/rsafier)
 - [Nan Liu](https://github.com/nanliu)

@@ -42,22 +42,18 @@ theme:
         - content.code.annotate
         - content.tabs.link
         - header.autohide
-        - navigation.prune
+          # - navigation.prune
           # - navigation.expand
-        - navigation.indexes
-        - navigation.instant
-        - navigation.sections
-        - navigation.tabs
-        - navigation.tabs.sticky
+          # - navigation.indexes
+          # - navigation.instant
+          # - navigation.sections
+          # - navigation.tabs
+          # - navigation.tabs.sticky
         - navigation.top
-        - navigation.tracking
-        - search.highlight
-        - search.share
-        - search.suggest
-        - navigation.instant
-        - navigation.tabs
-        - navigation.tabs.sticky
-        - navigation.sections
+          # - navigation.tracking
+          # - search.highlight
+          # - search.share
+          # - search.suggest
     # Don't include MkDocs' JavaScript
     include_search_page: false
     search_index_only: true
@@ -94,6 +90,8 @@ theme:
               - "*.pdf"
               - "*.gz"
               - "*.asciidoc"
+              - mkdocs/MAKE.md
+              - mkdocs/PLAY.md
               - worklogs/asherp.md
           regex:
               - '.*\.(tmp|bin|tar)$'
@@ -126,6 +124,7 @@ theme:
               permalink: true
 
     # Page tree
+    # NOTE: `make docs` modifies the docs/images links
     nav:
         - Home: index.md
         - Plebnet Wiki: https://plebnet.wiki/wiki/Main_Page
@@ -138,5 +137,8 @@ theme:
 
     # Development
     watch:
-        - .
-        - docs
+        - mkdocs
+        - mkdocs/mkdocs.yml
+        - mkdocs.yml
+        - mkdocs/README.md
+        - README.md

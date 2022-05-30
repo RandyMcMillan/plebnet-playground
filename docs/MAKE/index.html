@@ -19,7 +19,7 @@
     
     
       
-        <title>MAKE - Plebnet Playground</title>
+        <title>make - Plebnet Playground</title>
       
     
     
@@ -68,6 +68,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#make" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -98,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              MAKE
+              make
             
           </span>
         </div>
@@ -210,7 +215,7 @@
 
   <li class="md-tabs__item">
     <a href="./" class="md-tabs__link md-tabs__link--active">
-      MAKE
+      make
     </a>
   </li>
 
@@ -222,7 +227,7 @@
 
   <li class="md-tabs__item">
     <a href="../PLAY/" class="md-tabs__link">
-      PLAY
+      play
     </a>
   </li>
 
@@ -305,10 +310,43 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          make
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        MAKE
+        make
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -323,7 +361,7 @@
   
     <li class="md-nav__item">
       <a href="../PLAY/" class="md-nav__link">
-        PLAY
+        play
       </a>
     </li>
   
@@ -346,6 +384,23 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -359,40 +414,50 @@
                 
 
 
-  <h1>MAKE</h1>
+<h1 id="make">make</h1>
+<h2 id="usage">Usage</h2>
+<pre><code>make     [COMMAND]          [EXTRA_ARGUMENTS]
 
-<pre><code>
-    [USAGE]: make [COMMAND] [EXTRA_ARGUMENTS]   
+make
+     help                       print verbose help
 
+     report                     print environment variables
 
-         make 
-         make all                        install and run playground and cluster
-         make help                       print help
-         make report                     print environment variables
-         make initialize                 install dependencies - ubuntu/macOS
-         make init                       initialize basic dependencies
-         make build
-         make build para=true            parallelized build
-         make install
-                                         services=bitcoind,lnd,lndg,rtl,thunderhub,docs,tor,dashboard,notebook
-         make run
-                                         nocache=true verbose=true
+     all                        install and run the playground
+
+     venv
+     test-venv
+
+     setup
+     init                       initialize basic dependencies
+     initialize                 install dependencies - ubuntu/macOS
+
+     build
+     build para=true            parallelized build
+                                nocache=true verbose=true
+
+     install
+     install                    services=rtl,thunderhub
+     install-cluster            run a cluster of nodes
+
+     run
 
     [DEV ENVIRONMENT]:  
 
-         make signin profile=gh-user     ~/GH_TOKEN.txt required from github.com
-         make build
-         make package-all
+     signin profile=gh-user     ~/GH_TOKEN.txt required from github.com
+     build
+     package-all
 
-         make install-python38-sh
-         make install-python39-sh
 
+    [EXTRA_ARGUMENTS]:  set build variables 
+     nocache=true
+     verbose=true
 
     [EXAMPLES]:
 
-        make run nocache=true verbose=true
+    make run nocache=true verbose=true
 
-        make init &amp;&amp; play help
+    make init &amp;&amp; play help
 
 </code></pre>
 
@@ -429,13 +494,13 @@
       
       
         
-        <a href="../PLAY/" class="md-footer__link md-footer__link--next" aria-label="Next: PLAY" rel="next">
+        <a href="../PLAY/" class="md-footer__link md-footer__link--next" aria-label="Next: play" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              PLAY
+              play
             </div>
           </div>
           <div class="md-footer__button md-icon">
