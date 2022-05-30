@@ -1,4 +1,5 @@
 SHELL := /bin/bash
+NOHUP := $(shell which nohup)
 
 PWD 									?= pwd_unknown
 
@@ -222,6 +223,12 @@ export CMD_ARGUMENTS
 
 PACKAGE_PREFIX                          := ghcr.io
 export PACKAGE_PREFIX
+
+ccred=$(echo -e "\033[0;31m")
+ccyellow=$(echo -e "\033[0;33m")
+ccend=$(echo -e "\033[0m")
+
+
 .PHONY: - all
 -:
 	#NOTE: 2 hashes are detected as 1st column output with color
@@ -229,45 +236,37 @@ export PACKAGE_PREFIX
 
 .PHONY: help
 help:## print verbose help
-	@echo 'make [COMMAND] [EXTRA_ARGUMENTS]	'
 	@echo ''
-	#@echo ''
-	@echo 'make '
-	@echo '	 make all                        install and run playground and cluster'
-	@echo '	 make help                       print help'
-	@echo '	 make report                     print environment variables'
-	@echo '	 make initialize                 install dependencies - ubuntu/macOS'
-	@echo '	 make init                       initialize basic dependencies'
-	@echo '	 make build'
-	@echo '	 make build para=true            parallelized build'
-	@echo '	 make install'
-	@echo '	                                 services=bitcoind,lnd,lndg,rtl,thunderhub,docs,tor,dashboard,notebook'
-	@echo '	 make run'
-	@echo '	                                 nocache=true verbose=true'
+	@echo '	 make	[COMMAND]	[EXTRA_ARGUMENTS]	'
+	@echo ''
+	@echo '	 make	help			print verbose help'
+	@echo '	 make	report			print environment arguments'
+	@echo ''
+	@echo '	 make	all			install and run playground and cluster'
+	@echo ''
+	@echo '	 make	setup			basic setup for ubuntu/macOS'
+	@echo '	 make	init			initialize basic dependencies'
+	@echo '	 make	initialize		install libs and dependencies on ubuntu/macOS'
+	@echo ''
+	@echo '	 make	build			docker images'
+	@echo '	 make	build	para=true	parallelized build'
+	@echo '	 make	build	para=true nocache=true verbose=true'
+	@echo ''
+	@echo '	 make	install	'
+	@echo '	 make	install	services=bitcoind'
+	@echo '	 make	install	services=bitcoind,lnd'
+	@echo '	 make	install	services=bitcoind,cln'
+	@echo '	 make	install	services=bitcoind,lnd,rtl'
+	@echo '	 make	install	services=bitcoind,lnd,thunderhub'
+	@echo '	 make	install	services=bitcoind,lnd,lndg,rtl,thunderhub,docs,tor,dashboard,notebook'
+	@echo ''
+	@echo '	 make	run'
 	@echo ''
 	@echo '	[DEV ENVIRONMENT]:	'
 	@echo ''
-#	@echo '	 make shell            compiling environment on host machine'
 	@echo '	 make signin profile=gh-user     ~/GH_TOKEN.txt required from github.com'
-#	@echo '	 make header package-header'
-	@echo '	 make build'
-#	@echo '	 make build package-statoshi'
 	@echo '	 make package-all'
 	@echo ''
-	@echo '	 make install-python38-sh'
-	@echo '	 make install-python39-sh'
-	@echo ''
-#	@echo '	[EXTRA_ARGUMENTS]:	set build variables	'
-#	@echo ''
-#	@echo '	nocache=true'
-#	@echo '	            	add --no-cache to docker command and apk add $(NOCACHE)'
-#	@echo '	port=integer'
-#	@echo '	            	set PUBLIC_PORT default 80'
-#	@echo ''
-#	@echo '	nodeport=integer'
-#	@echo '	            	set NODE_PORT default 8333'
-#	@echo ''
-#	@echo '	            	TODO'
 #	@echo ''
 #	@echo '	[DOCKER COMMANDS]:	push a command to the container	'
 #	@echo ''
@@ -275,11 +274,10 @@ help:## print verbose help
 #	@echo '	cmd="command"	'
 #	@echo '	             	send CMD_ARGUMENTS to the [TARGET]'
 	@echo ''
-	@echo '	[EXAMPLES]:'
+	@echo '	    [EXAMPLES]:'
 	@echo ''
-	@echo '	make run nocache=true verbose=true'
-	@echo ''
-	@echo '	make init && play help'
+	@echo '	    make run nocache=true verbose=true'
+	@echo '	    make init && play help'
 	@echo ''
 	@sed -n 's/^# //p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/# /'
 	@sed -n 's/^## //p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/## /'
@@ -347,13 +345,14 @@ ifneq ($(shell id -u),0)
 #.ONESHELL:
 	sudo -s
 endif
-all: initialize init install-cluster install## all
+all: initialize init install-cluster install## install and run playground with cluster
 .PHONY: venv
 venv:## create python3 virtualenv .venv
 	test -d .venv || $(PYTHON3) -m virtualenv .venv
 	( \
-	   source .venv/bin/activate; pip install -r mkdocs/requirements.txt; \
+	   $(NOHUP) source .venv/bin/activate; pip install -r mkdocs/requirements.txt; \
 	);
+
 	@echo "To activate (venv)"
 	@echo "try:"
 	@echo ". .venv/bin/activate"
@@ -367,7 +366,6 @@ test-venv:## test virutalenv .venv
 	   source .venv/bin/activate; pip install -r mkdocs/requirements.txt; \
 	);
 .PHONY: init setup
-.SILENT:
 setup: init venv## basic setup
 init:
 
@@ -387,7 +385,7 @@ endif
 	chown -R $(shell id -u) volumes           || echo
 	chown -R $(shell id -u) cluster           || echo
 	chown -R $(shell id -u) cluster/volumes   || echo
-
+.SILENT:
 	install -v -m=o+rwx $(PWD)/scripts/*  /usr/local/bin/
 	install -v -m=o+rwx $(PWD)/getcoins.py  /usr/local/bin/play-getcoins
 	pushd scripts > /dev/null; for string in *; do sudo chmod -R o+rwx /usr/local/bin/$$string; done; popd  > /dev/null || echo
@@ -409,9 +407,9 @@ initialize:## install libs and dependencies
 .PHONY: install install-cluster
 .SILENT:
 install:## create docker-compose.yml and run playground
-	bash -c './install.sh $(TRIPLET)'
+	$(NOHUP) bash -c './install.sh $(TRIPLET)' &
 install-cluster:## create cluster/docker-compose.yml and run playground-cluster
-	bash -c 'pushd cluster && ./up-generic.sh 5 && popd'
+	$(NOHUP) bash -c 'pushd cluster && ./up-generic.sh 5 && popd' &
 #######################
 .PHONY: uninstall
 uninstall:
@@ -432,22 +430,19 @@ btcd:
 .PHONY: docs
 docs: init
 	@echo "Use 'make docs nocache=true' to force docs rebuild..."
-
-	echo "# MAKE COMMAND" > mkdocs/MAKE.md
+	echo "# make" > mkdocs/MAKE.md
 	echo '## Usage' >> mkdocs/MAKE.md
+	#echo '```' >> mkdocs/MAKE.md
 	make help >> mkdocs/MAKE.md
-	echo '```' >> mkdocs/MAKE.md
-
-	echo "## PLAY COMMAND" > mkdocs/PLAY.md
+	#echo '```' >> mkdocs/MAKE.md
+	echo "# play" > mkdocs/PLAY.md
 	echo '```' >> mkdocs/PLAY.md
 	play >> mkdocs/PLAY.md
 	echo '```' >> mkdocs/PLAY.md
-#
 	echo "## PLAY-BITCOIN COMMAND" >> mkdocs/PLAY.md
 	echo '```' >> mkdocs/PLAY.md
 	play-bitcoin >> mkdocs/PLAY.md
 	echo '```' >> mkdocs/PLAY.md
-#
 	echo "## PLAY-LND COMMAND" >> mkdocs/PLAY.md
 	echo '```' >> mkdocs/PLAY.md
 	play-lnd >> mkdocs/PLAY.md

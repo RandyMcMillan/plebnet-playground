@@ -1,4 +1,4 @@
-## PLAY COMMAND
+# play
 ```
 play ids
 play images

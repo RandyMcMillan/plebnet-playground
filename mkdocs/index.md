@@ -2,7 +2,7 @@
 # Plebnet Playground Sandbox Docker Package
 [![plebnet-playground](https://github.com/PLEBNET-PLAYGROUND/plebnet-playground-docker/actions/workflows/plebnet-playground.yml/badge.svg)](https://github.com/PLEBNET-PLAYGROUND/plebnet-playground-docker/actions/workflows/plebnet-playground.yml)
 
-This package will setup a bitcoind, lnd, and tor daemon that will connect to the Plebnet Playground Sandbox (Signet) Chain. This allows users to use and test bitcoin and lightning technologies without the financial risk involved with running on the mainnet chain. RTL (Ride The Lightning) and ThunderHub Web UI is also include to provide a more user friendly experience. 
+This package will setup a bitcoind, lnd, and tor daemon that will connect to the Plebnet Playground Sandbox (Signet) Chain. This allows users to use and test bitcoin and lightning technologies without the financial risk involved with running on the mainnet chain. RTL (Ride The Lightning) and ThunderHub Web UI is also include to provide a more user friendly experience.
 ## Donate to Project
 ***
 - [Crowdfund for Playground + Plebnet.wiki running costs](https://btcpay.xenon.fun/apps/477A5RjNYiRcHWZUm4di4V6DFLnx/crowdfund)
@@ -15,27 +15,7 @@ This package will setup a bitcoind, lnd, and tor daemon that will connect to the
 - You will need to setup LND wallet from scratch, instructions below
 - PM [@xenonfun](https://t.me/xenonfun) on Telegram to get access to the Plebnet Playground Telegram group
 - All ports are completely exposed to local host, this is mostly to make it easy for end-users to tinker, and as the signet coins in the playground are worthless so there is little risk of hacking. You can modify the ```docker-compose.yaml``` should these cause conflicts.
-- For Windows users you will need to use something like git bash until we make some powershell scripts to provide cleaner functionality 
-## Basic Setup
-***
-### Clone Repo & Install Requirements
-***
-
-
-If you already have *virtualenv* installed, great. If not, and you are new to using Python, see this article about why its recommended to use a
-[virtualenv](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/)
-
-
-```
-git clone https://github.com/PLEBNET-PLAYGROUND/plebnet-playground-docker --config core.autocrlf=input
-cd plebnet-playground-docker
-pip3 install virtualenv 
-python3 -m venv venv 
-source venv/bin/activate
-pip3 install -r requirements.txt
-```
-
-Follow [these instructions](https://docs.docker.com/compose/install/#install-compose) to install the `docker compose` subcommand on your system (Mac, Windows, Windows Server 2016, or Linux systems). 
+- For Windows users you will need to use something like git bash until we make some powershell scripts to provide cleaner functionality
 
 ### Supported System Architectures
 
@@ -59,25 +39,76 @@ Follow [these instructions](https://docs.docker.com/compose/install/#install-com
 | dashboard |  Jupyter Dashboard |
 | lndg |  lndg Dashboard (available on port 8889) |
 
-### Install and start all services (will autodetect platform)
+
+## Setup
+***
+### Clone Repo & Install Requirements
+***
+
+### git clone
+```
+git clone https://github.com/PLEBNET-PLAYGROUND/plebnet-playground-docker --config core.autocrlf=input
+cd plebnet-playground-docker
+```
+
+### docker
+#### ``` $ make init initialize ```
+#### MacOS - [brew](https://brew.sh)
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install make docker-compose python3 virtualenv
+brew install --cask docker
+```
+#### Linux - [apt-get](https://linux.die.net/man/8/apt-get)
+```
+sudo apt-get update
+sudo apt-get install make runc containerd docker.io docker-compose
+sudo apt-get python3 python3-pip python3-venv
+```
+
+
+### virtualenv
+#### ``` $ make venv```
+###### If you already have *virtualenv* installed, great. If not, and you are new to using Python, see this article about why its recommended to use a [virtualenv](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/)
+
+```
+python3 -m pip install virtualenv
+python3 -m venv .venv
+source .venv/bin/activate
+or
+. .venv/bin/activate
+```
+
+```
+(.venv)
+python3 -m pip install -r requirements.txt
+```
+
+
+### Install and start all services
+#### ``` $ make install```
 ***
 
 ```sh
-./install.sh   
+./install.sh
 ```
 
 ### Install and start just the `bitcoind`,`lnd` services (comma separate them)
+#### ``` $ make install services=bitcoind,lnd```
 ```sh
-services=bitcoind,lnd ./install.sh   
+services=bitcoind,lnd ./install.sh
 ```
 
-### Start containers
+## Start Plebnet Playground
+### docker-compose up
+#### ``` $ make run```
 ***
 ```
 docker-compose up -d
 ```
 
-### Stop containers
+## Stop Plebnet Playground
+### docker-compose stop
 ***
 ```
 docker-compose stop
@@ -90,9 +121,38 @@ docker-compose stop
 ```
 ***
 
-## [Make](MAKE.md) Command
+## [Make](make.md) Command
 
 ### Ubuntu Linux
+
+**Note**
+This is a note
+
+**Warning**
+This is a warning
+
+> **⚠ WARNING: Aliens are coming.**
+> A description of the colour, smell and dangerous behaviour of the aliens.
+
+---
+
+>[!WARNING]
+>This is a warning
+
+---
+
+>[!NOTE]
+>This is a note
+
+---
+
+!!! note
+    test
+
+!!! type "Title of Admonition"
+    Something importatnt you want to highlight!
+
+markdown.markdown(some_text, extensions=['admonition'])
 
 ```
 apt install make
@@ -117,7 +177,7 @@ brew install --cask docker
 open /Applications/Docker.app
 ```
 
-## [Play](PLAY.md) Command
+## [Play](play.md) Command
 
 ```
 make
@@ -176,7 +236,7 @@ alias bos="docker run -it --rm -v $PWD/volumes/bos_datadir:/home/node/.bos:rw --
 The wallet will automatically be made for you and use the default password  is ```12345678```
 You can change the password with the ```change-password-playground``` alias. If you do change your password make sure to update the ```unlock.password``` file with your new password.
 
- 
+
 ## Make your first peer with the seed node for Plebnet Playground Signet
 ***
 - ```connect-playground```
@@ -231,7 +291,7 @@ USE_TEST_DATA=TRUE docker-compose up dashboard
 - [Bitcoin Wiki](https://bitcoin.it)
 - [Lightning Wiki](https://lightningwiki.net/index.php/Main_Page)
 - [Plebnet Telegram](http://plebnet.org/)
-  
+
 ### Contributors
 - [Richard Safier](https://github.com/rsafier)
 - [Nan Liu](https://github.com/nanliu)
