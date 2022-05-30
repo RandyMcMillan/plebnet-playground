@@ -16,26 +16,6 @@ This package will setup a bitcoind, lnd, and tor daemon that will connect to the
 - PM [@xenonfun](https://t.me/xenonfun) on Telegram to get access to the Plebnet Playground Telegram group
 - All ports are completely exposed to local host, this is mostly to make it easy for end-users to tinker, and as the signet coins in the playground are worthless so there is little risk of hacking. You can modify the ```docker-compose.yaml``` should these cause conflicts.
 - For Windows users you will need to use something like git bash until we make some powershell scripts to provide cleaner functionality
-## Basic Setup
-***
-### Clone Repo & Install Requirements
-***
-
-
-If you already have *virtualenv* installed, great. If not, and you are new to using Python, see this article about why its recommended to use a
-[virtualenv](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/)
-
-
-```
-git clone https://github.com/PLEBNET-PLAYGROUND/plebnet-playground-docker --config core.autocrlf=input
-cd plebnet-playground-docker
-pip3 install virtualenv
-python3 -m venv venv
-source venv/bin/activate
-pip3 install -r requirements.txt
-```
-
-Follow [these instructions](https://docs.docker.com/compose/install/#install-compose) to install the `docker compose` subcommand on your system (Mac, Windows, Windows Server 2016, or Linux systems).
 
 ### Supported System Architectures
 
@@ -59,7 +39,54 @@ Follow [these instructions](https://docs.docker.com/compose/install/#install-com
 | dashboard |  Jupyter Dashboard |
 | lndg |  lndg Dashboard (available on port 8889) |
 
-### Install and start all services (will autodetect platform)
+
+## Setup
+***
+### Clone Repo & Install Requirements
+***
+
+### git clone
+```
+git clone https://github.com/PLEBNET-PLAYGROUND/plebnet-playground-docker --config core.autocrlf=input
+cd plebnet-playground-docker
+```
+
+### docker
+#### ``` $ make init initialize ```
+#### MacOS - [brew](https://brew.sh)
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install make docker-compose python3 virtualenv
+brew install --cask docker
+```
+#### Linux - [apt-get](https://linux.die.net/man/8/apt-get)
+```
+sudo apt-get update
+sudo apt-get install make runc containerd docker.io docker-compose
+sudo apt-get python3 python3-pip python3-venv
+```
+
+
+### virtualenv
+#### ``` $ make venv```
+###### If you already have *virtualenv* installed, great. If not, and you are new to using Python, see this article about why its recommended to use a [virtualenv](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/)
+
+```
+python3 -m pip install virtualenv
+python3 -m venv .venv
+source .venv/bin/activate
+or
+. .venv/bin/activate
+```
+
+```
+(.venv)
+python3 -m pip install -r requirements.txt
+```
+
+
+### Install and start all services
+#### ``` $ make install```
 ***
 
 ```sh
@@ -67,17 +94,21 @@ Follow [these instructions](https://docs.docker.com/compose/install/#install-com
 ```
 
 ### Install and start just the `bitcoind`,`lnd` services (comma separate them)
+#### ``` $ make install services=bitcoind,lnd```
 ```sh
 services=bitcoind,lnd ./install.sh
 ```
 
-### Start containers
+## Start Plebnet Playground
+### docker-compose up
+#### ``` $ make run```
 ***
 ```
 docker-compose up -d
 ```
 
-### Stop containers
+## Stop Plebnet Playground
+### docker-compose stop
 ***
 ```
 docker-compose stop
@@ -90,7 +121,7 @@ docker-compose stop
 ```
 ***
 
-## [Make](MAKE.md) Command
+## [Make](make.md) Command
 
 ### Ubuntu Linux
 
@@ -146,7 +177,7 @@ brew install --cask docker
 open /Applications/Docker.app
 ```
 
-## [Play](PLAY.md) Command
+## [Play](play.md) Command
 
 ```
 make
