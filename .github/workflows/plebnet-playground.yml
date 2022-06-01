@@ -65,8 +65,7 @@ jobs:
           make initialize init
           make venv && . .venv/bin/activate
           make build para=true
-          make install
-          ./install.sh
+          make install install-cluster
           make help report
 
       - name: play
@@ -110,15 +109,9 @@ jobs:
         run: |
           play-lnd "lncli -h"
 
-      - name: make docs git diff
-        run: |
-          make docs
-          git diff
-
       - name: uninstall
         run: |
           make prune-playground || echo
           make prune-cluster || echo
           make prune || echo
           make uninstall || echo
-
