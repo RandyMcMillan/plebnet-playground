@@ -51,16 +51,24 @@ mkdir -p volumes/lnbits_datadir
 
 
 #REF: https://docs.docker.com/engine/install/linux-postinstall
-while ! docker system info > /dev/null 2>&1; do
-    echo "Waiting for docker to start..."
-    if [[ "$(uname -s)" == "Linux" ]]; then
-        systemctl restart docker.service
-    fi
-    if [[ "$(uname -s)" == "Darwin" ]]; then
-        open --background -a /./Applications/Docker.app/Contents/MacOS/Docker
-    fi
+if [[ "$(uname -s)" == "Linux" ]]; then
+    systemctl restart docker.service
+fi
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    open -g /./Applications/Docker.app
+fi
 
-    sleep 1;
+BAR='...'
+echo -ne "Waiting for docker to start"$BAR
+while ! docker system info > /dev/null 2>&1; do
+
+    for i in {1..3}; do
+        tput civis
+        echo -ne "${BAR:0:$i}" # print $i chars of $BAR from 0 position
+        sleep .5                 # wait 100ms between "frames"
+    done
+    tput cnorm
+    echo -ne "\rWaiting for docker to start."
 
 done
 
