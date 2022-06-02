@@ -82,7 +82,7 @@ if hash brew 2>/dev/null; then
         brew install gawk
     fi
     # save time in CI
-    # if [ "$(whoami)" != "runner" ]; then
+    if [ "$(whoami)" != "runner" ]; then
         if ! hash docker 2>/dev/null; then
             rm /usr/local/share/zsh/site-functions/_docker
             rm /usr/local/share/zsh/site-functions/_docker_compose
@@ -106,7 +106,7 @@ if hash brew 2>/dev/null; then
         if ! hash docker-compose 2>/dev/null; then
             brew install docker-compose
         fi
-    # fi
+    fi
     if ! hash mkdocs 2>/dev/null; then
         brew install mkdocs
     fi
