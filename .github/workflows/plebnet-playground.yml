@@ -47,13 +47,23 @@ jobs:
       - run: pip install -r requirements.txt
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
-      - name: make initialize init venv build install.sh help report
+      - name: printenv
         run: |
           printenv
-          make initialize init
+      - name: sudo -sH make initialize init
+        run: |
+          sudo -sH make initialize init
+      - name: make venv && . .venv/bin/acativate
+        run: |
           make venv && . .venv/bin/activate
-          make build para=true
-          make install install-cluster
+      - name: sudo -sH make build para=true
+        run: |
+          sudo -sH make build para=true
+      - name: sudo -sH make install install-cluster
+        run: |
+          sudo -sH make install install-cluster
+      - name: make help report
+        run: |
           make help report
 
       - name: play
