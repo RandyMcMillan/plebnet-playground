@@ -413,7 +413,7 @@ run: docs init## 	docker-compose up -d
 	$(DOCKER_COMPOSE) $(VERBOSE) $(NOCACHE) up -d
 #######################
 .PHONY: build
-build: init
+build:
 	$(DOCKER_COMPOSE) $(VERBOSE) build --pull $(PARALLEL) --no-rm $(NOCACHE)
 #######################
 .PHONY: btcd
