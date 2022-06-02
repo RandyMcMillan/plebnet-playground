@@ -61,10 +61,10 @@ if hash apt-get 2>/dev/null; then
     sudo apt-get update
 
     # save time in CI
-    if [ "$(whoami)" != "runner" ]; then
+    # if [ "$(whoami)" != "runner" ]; then
         sudo apt-get install -y \
         runc containerd docker.io docker-compose
-    fi
+    # fi
 
     sudo apt-get install -y \
     python3 python3-pip mkdocs

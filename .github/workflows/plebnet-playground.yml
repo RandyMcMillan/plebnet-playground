@@ -58,8 +58,7 @@ jobs:
           make venv && . .venv/bin/activate
       - name: make build para=true
         run: |
-          docker compose build
-          # make build para=true
+          make report build para=true
       - name: sudo -sH make install install-cluster
         run: |
           sudo -sH make install install-cluster
