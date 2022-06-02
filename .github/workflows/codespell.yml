@@ -36,8 +36,7 @@ jobs:
           pip3 install -U codespell
           go get github.com/client9/misspell/cmd/misspell
       - name: markdown-syntax
-        run: |
-          git grep -n --color $'\r' -- "*.md" && \
+        run: git grep -n --color $'\r' -- "*.md" && \
             echo "^ Please use Unix style line endings (\n)." && exit 0 || true
           git grep -n --color ' $' -- "*.md" && \
             echo "^ Trailing space detected at end of line." && exit 0 || true
