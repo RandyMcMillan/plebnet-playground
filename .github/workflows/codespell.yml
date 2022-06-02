@@ -30,6 +30,7 @@ jobs:
       - name: printenv
         run: |
           printenv
+          make lint-dockerfiles
       - name: install-codespell-asciidoctor
         run: |
           sudo apt install asciidoctor
