@@ -385,7 +385,7 @@ endif
 	pushd docs 2>/dev/null && $(PYTHON3) -m pip install -q -r requirements.txt && popd  2>/dev/null
 	$(PYTHON3) plebnet_generate.py TRIPLET=$(TRIPLET) services=$(SERVICES)
 
-	pushd scripts > /dev/null; for string in *; do sudo chmod -R o+rwx /usr/local/bin/$$string; done; popd  2>/dev/null || echo
+	pushd scripts > /dev/null; for string in *; do sudo -sH chmod -R o+rwx /usr/local/bin/$$string; done; popd  2>/dev/null || echo
 
 
 #######################
