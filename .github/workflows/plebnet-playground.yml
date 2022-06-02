@@ -50,10 +50,10 @@ jobs:
       - name: make initialize init venv build install.sh help report
         run: |
           printenv
-          make initialize init
+          sudo -sH make initialize init
           make venv && . .venv/bin/activate
-          make build para=true
-          make install install-cluster
+          sudo -sH make build para=true
+          sudo -sH make install install-cluster
           make help report
 
       - name: play
