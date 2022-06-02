@@ -25,8 +25,7 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FILTER_REGEX_EXCLUDE: |
-              /github/workspace/.github/workflows/codespell.yml
+          FILTER_REGEX_EXCLUDE: codespell.yml
       - name: make lint-dockerfiles
         run: |
           make lint-dockerfiles
