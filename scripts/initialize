@@ -158,7 +158,7 @@ if hash brew 2>/dev/null; then
     # echo -ne "\rWaiting for docker to start"$BAR
     if ! pgrep -q Docker || ! pgrep -q docker-proxy; then
         if [[ "$(uname -s)" == "Linux" ]]; then
-            systemctl restart docker.service
+            systemctl restart docker
         fi
         if [[ "$(uname -s)" == "Darwin" ]]; then
             # open -g -j /Applications/Docker.app
