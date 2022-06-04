@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+export COMPOSE_PROJECT_NAME=plebnet-playground-docker
+
 if [ -z "$TRIPLET" ]
     then
     echo "Auto Detect"
@@ -64,5 +67,7 @@ while ! docker system info > /dev/null 2>&1; do
 
 done
 
-docker compose build $PARALLEL $NOCACHE --build-arg TRIPLET=$TRIPLET || docker-compose build $PARALLEL $NOCACHE --build-arg TRIPLET=$TRIPLET
-docker compose -p plebnet-playground-cluster up --remove-orphans -d || docker-compose -p plebnet-playground-cluster up --remove-orphans -d
+docker compose build $PARALLEL $NOCACHE --build-arg TRIPLET=$TRIPLET || \
+    docker-compose build $PARALLEL $NOCACHE --build-arg TRIPLET=$TRIPLET
+docker compose -p plebnet-playground-docker up --remove-orphans -d || \
+    docker-compose -p plebnet-playground-docker up --remove-orphans -d

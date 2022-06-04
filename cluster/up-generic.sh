@@ -49,6 +49,7 @@ while ! docker system info > /dev/null 2>&1; do
     fi
 
     sleep 1;
+done
 
 for (( i=0; i<=$bitcoind-1; i++ ))
 do
