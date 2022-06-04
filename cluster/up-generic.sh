@@ -1,7 +1,7 @@
-#This is for internal testing only
+#!/usr/bin/env bash
 export COMPOSE_PROJECT_NAME=plebnet-playground-cluster
 
-if [ -z "$1" ]; then
+if [ -z "$TRIPLET" ]; then
     count=5
 else
     count=$1
@@ -20,7 +20,6 @@ echo "Auto Detect"
         #echo './install.sh x86_64-linux-gnu'
         export TRIPLET="x86_64-linux-gnu"
     fi
-echo "TRIPLET =" $TRIPLET
 # : ${TRIPLET:=x86_64-linux-gnu}
 lnd=$count
 echo "lnd Count:"  $lnd
@@ -34,10 +33,22 @@ echo "tor Count:"  $tor
 $(which python3) plebnet_generate.py TRIPLET=$TRIPLET bitcoind=$bitcoind lnd=$lnd tor=$tor
 
 #Remove
-docker-compose down
+docker compose down || docker-compose down
 
-#Create Datafile
+#Create data directories
 mkdir -p volumes
+
+#REF: https://docs.docker.com/engine/install/linux-postinstall
+while ! docker system info > /dev/null 2>&1; do
+    echo "Waiting for docker to start..."
+    if [[ "$(uname -s)" == "Linux" ]]; then
+        systemctl restart docker
+    fi
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        open --background -a /./Applications/Docker.app/Contents/MacOS/Docker
+    fi
+
+    sleep 1;
 
 for (( i=0; i<=$bitcoind-1; i++ ))
 do
@@ -54,6 +65,5 @@ do
     mkdir -p volumes/tor_torrcdir_$i
 done
 
-docker-compose build --build-arg TRIPLET=$TRIPLET
-docker-compose -p plebnet-playground-cluster up -d
-
+docker compose build $PARALLEL $NOCACHE --build-arg TRIPLET=$TRIPLET || docker-compose build $PARALLEL $NOCACHE --build-arg TRIPLET=$TRIPLET
+docker compose -p plebnet-playground-cluster up --remove-orphans -d || docker-compose -p plebnet-playground-cluster up --remove-orphans -d

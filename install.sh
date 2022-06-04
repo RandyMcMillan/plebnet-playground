@@ -54,7 +54,7 @@ mkdir -p volumes/lnbits_datadir
 while ! docker system info > /dev/null 2>&1; do
     echo "Waiting for docker to start..."
     if [[ "$(uname -s)" == "Linux" ]]; then
-        systemctl restart docker.service
+        systemctl restart docker
     fi
     if [[ "$(uname -s)" == "Darwin" ]]; then
         open --background -a /./Applications/Docker.app/Contents/MacOS/Docker
@@ -64,6 +64,5 @@ while ! docker system info > /dev/null 2>&1; do
 
 done
 
-docker compose build --build-arg TRIPLET=$TRIPLET || docker-compose build --build-arg TRIPLET=$TRIPLET
-docker compose up --remove-orphans -d || docker-compose up --remove-orphans -d
-
+docker compose build $PARALLEL $NOCACHE --build-arg TRIPLET=$TRIPLET || docker-compose build $PARALLEL $NOCACHE --build-arg TRIPLET=$TRIPLET
+docker compose -p plebnet-playground-cluster up --remove-orphans -d || docker-compose -p plebnet-playground-cluster up --remove-orphans -d
