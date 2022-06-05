@@ -55,15 +55,21 @@ jobs:
       - uses: syphar/restore-virtualenv@v1
         id: cache-virtualenv
       - uses: syphar/restore-pip-download-cache@v1
+        id: restore-pip-cache
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
-      - run: pip install -r requirements.txt
+      - name: make init venv
+        run: |
+          make initialize init
+          make venv && . .venv/bin/activate
+          make test-venv
+          pip install -r requirements.txt
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
       - name: make initialize init venv build install.sh help report
         run: |
-          make initialize init
-          make venv && . .venv/bin/activate
+          # make venv && . .venv/bin/activate
+          make test-venv
           make build para=true
           make install
           ./install.sh
