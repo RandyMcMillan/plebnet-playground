@@ -49,6 +49,34 @@ export BTCD_ID
 BTCD_IMAGE=$(echo $(docker images | awk '/btcd/'|awk ' {print $3}' | awk 'NR==1'))
 export BTCD_IMAGE
 
+
+declare -a mahabharata=("playground-bitcoind-" "playground-bitcoind-" "playground-bitcoind-" "playground-bitcoind-" "playground-bitcoind-")
+
+# get length of an array
+length=${#mahabharata[@]}
+
+# use C style for loop syntax to read all values and indexes
+for (( j=0; j<length; j++ ));
+do
+  printf "Current index %d with value %s\n" $j "${mahabharata[$j]}"
+  mahabharata[$j]=$(docker ps | awk '/'${mahabharata[$j]}'/'|awk ' {print $1}' | awk 'NR=='$j)
+  printf "Current index %d with value %s\n" $j "${mahabharata[$j]}"
+done
+
+declare -a CLUSTER=()
+CLUSTER[0]="playground-bitcoind-0"
+CLUSTER[1]="playground-bitcoind-1"
+CLUSTER[2]="playground-bitcoind-2"
+CLUSTER[3]="playground-bitcoind-3"
+CLUSTER[4]="playground-bitcoind-4"
+
+for (( z=1; z<5; z++));
+do
+    echo z=$z
+    CLUSTER[$z]=$(docker ps | awk '/'$CLUSTER[$z]'/'|awk ' {print $1}' | awk 'NR=='$z)
+    echo $CLUSTER[$z]
+done
+
     if [[ ${!i} = info ]]; then
         ((i++))
         play ids
