@@ -50,19 +50,19 @@ BTCD_IMAGE=$(echo $(docker images | awk '/btcd/'|awk ' {print $3}' | awk 'NR==1'
 export BTCD_IMAGE
 
 
-declare -a mahabharata=("playground-bitcoind-" "playground-bitcoind-" "playground-bitcoind-" "playground-bitcoind-" "playground-bitcoind-")
+declare -a cluster_bitcoind=("playground-bitcoind-" "playground-bitcoind-" "playground-bitcoind-" "playground-bitcoind-" "playground-bitcoind-")
 
 # get length of an array
-length=${#mahabharata[@]}-1
+length=${#cluster_bitcoind[@]}-1
 
 # use C style for loop syntax to read all values and indexes
 for (( j=1; j<length; j++ ));
 do
-  # printf "Current index %d with value %s\n" $j "${mahabharata[$j]}"
-  mahabharata[$j]=$(docker ps | awk '/'${mahabharata[$j]}'/'|awk ' {print $1}' | awk 'NR=='$j)
-  if [ -n ${mahabharata[$j]} ];
+  # printf "Current index %d with value %s\n" $j "${cluster_bitcoind[$j]}"
+  cluster_bitcoind[$j]=$(docker ps | awk '/'${cluster_bitcoind[$j]}'/'|awk ' {print $1}' | awk 'NR=='$j)
+  if [ -n ${cluster_bitcoind[$j]} ];
   then
-      printf "Current index %d with value %s\n" $j "${mahabharata[$j]}"
+      printf "Current index %d with value %s\n" $j "${cluster_bitcoind[$j]}"
   fi
 done
 
@@ -95,6 +95,20 @@ done
         echo "BITCOIND_ID:              $BITCOIND_ID"
         echo "TOR_ID:                   $TOR_ID"
         echo
+        echo "CLUSTER:"
+        declare -a cluster_bitcoind=("playground-bitcoind-" "playground-bitcoind-" "playground-bitcoind-" "playground-bitcoind-" "playground-bitcoind-")
+        # get length of an array
+        length=${#cluster_bitcoind[@]}-1
+        for (( j=1; j<length; j++ ));
+        do
+          cluster_bitcoind[$j]=$(docker ps | awk '/'${cluster_bitcoind[$j]}'/'|awk ' {print $1}' | awk 'NR=='$j)
+          if [ -n ${cluster_bitcoind[$j]} ];
+          then
+              printf "playground-bitcoind-%d:    %s\n" $(($j-1)) "${cluster_bitcoind[$j]}"
+              INDEX=$(($j-1))
+              export INDEX
+          fi
+        done
         #[ -z "$BTCD_ID" ] && echo "try 'make btcd'"|| echo BTCD_ID:
         #[ -z "$BTCD_ID" ] && echo || echo $BTCD_ID
         exit
