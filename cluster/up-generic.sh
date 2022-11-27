@@ -1,4 +1,5 @@
 #This is for internal testing only
+PYTHON=$(which python3)
 export COMPOSE_PROJECT_NAME=plebnet-playground-cluster
 
 if [ -z "$1" ]; then
@@ -31,7 +32,7 @@ echo "bitcoind Count:"  $bitcoind
 torcount=$(expr ${lnd} / 16 + 1)
 tor=$torcount
 echo "tor Count:"  $tor
-python plebnet_generate.py TRIPLET=$TRIPLET bitcoind=$bitcoind lnd=$lnd tor=$tor
+$PYTHON plebnet_generate.py TRIPLET=$TRIPLET bitcoind=$bitcoind lnd=$lnd tor=$tor
 
 #Remove
 docker-compose down
