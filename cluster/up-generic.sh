@@ -1,4 +1,5 @@
 #This is for internal testing only
+alias python=$(which python3)
 PYTHON=$(which python3)
 export COMPOSE_PROJECT_NAME=plebnet-playground-cluster
 
@@ -21,7 +22,7 @@ echo "Auto Detect"
         #echo './install.sh x86_64-linux-gnu'
         export TRIPLET="x86_64-linux-gnu"
     fi
-echo "TRIPLET =" $TRIPLET
+echo "TRIPLET="$TRIPLET
 # : ${TRIPLET:=x86_64-linux-gnu}
 lnd=$count
 echo "lnd Count:"  $lnd
