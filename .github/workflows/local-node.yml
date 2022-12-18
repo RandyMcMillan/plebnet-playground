@@ -1,0 +1,94 @@
+name: local-node
+
+# Controls when the action will run.
+on:
+  pull_request:
+    branches:       #[ master ]
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+      - 'master'    # includes master
+      - 'main'      # includes main
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    #paths:
+    #  - '.github/workflows/automate.yml'
+    #schedule:
+    #  - cron: "*/5 * * * *"
+    branches:       #[ master ]
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+      - 'master'    # includes master
+      - 'main'      # includes main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  github-workspace:
+    name: github-workspace
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-22.04, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+      - name: Print github workspace
+        run: |
+          printenv
+
+  ubuntu-build_and_test:
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: syphar/restore-virtualenv@v1
+        id: cache-virtualenv
+      - uses: syphar/restore-pip-download-cache@v1
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+
+      - run: pip install -r requirements.txt
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+
+      - name: make
+        run: |
+          make
+      - name: make init
+        run: |
+          make init
+      - name: make venv
+        run: |
+          make venv
+      - name: sudo apt update
+        run: |
+          sudo apt update
+      - name: sudo add-apt-repository ppa:luke-jr/bitcoincore
+        run: |
+          sudo add-apt-repository ppa:luke-jr/bitcoincore
+      - name: sudo apt update
+        run: |
+          sudo apt-get update
+      - name: sudo apt-get install bitcoin-qt
+        run: |
+          sudo apt-get install bitcoin-qt
+      - name: sudo apt install snapd
+        run: |
+          sudo apt install snapd
+      - name: sudo snap install bitcoin-core
+        run: |
+          sudo snap install bitcoin-core
+      - name: sudo bitcoin-core.cli --version
+        run: |
+          sudo bitcoin-core.cli --version
+          which bitcoin-core.cli
+          which bitcoin-core.cli
