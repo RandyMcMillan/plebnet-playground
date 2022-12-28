@@ -4,17 +4,29 @@ test -z "$(docker ps -q 2>/dev/null)" || $(docker ps -q 2>/dev/null | xargs -L1 
 
 function nuke-docker(){
 
-    if hash systemctl 2>/dev/null; then
-        if hash docker 2>/dev/null; then
-            if hash apt-get 2>/dev/null; then
-                sudo apt-get purge docker-ce docker-ce-cli containerd.io moby-engine moby-cli
-            fi
-        fi
-    fi
+
+echo -e "\n************ NUKE DOCKER *************"
+echo      "************ NUKE DOCKER *************"
+echo      "************ NUKE DOCKER *************"
+echo -e   "************ NUKE DOCKER *************\n"
+
+if hash systemctl 2>/dev/null; then
+	if hash docker 2>/dev/null; then
+		if hash apt-get 2>/dev/null; then
+			sudo apt-get purge docker-ce docker-ce-cli containerd.io moby-engine moby-cli
+		elif hash brew 2>/dev/null; then
+			brew uninstall -f docker
+		fi
+	fi
+fi
 
     sudo rm -rf /var/lib/docker
 
-    sudo apt-get install runc containerd
+	if hash apt-get 2>/dev/null; then
+		sudo apt-get install runc containerd
+	elif hash brew 2>/dev/null; then
+		echo $(which brew)
+	fi
 
     curl -fsSL https://get.docker.com | sudo sh
     docker --version
