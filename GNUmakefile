@@ -509,7 +509,7 @@ endif
 nuke-docker:## 	force reinstall of docker
 	@./scripts/nuke-docker
 .PHONY: nostr-rs-relay
-nostr-rs-relay:## 	pushd nostr-rs-relay && make build run && popd
+nostr-rs-relay:nostr-rs-relay-build## 	pushd nostr-rs-relay && make build run && popd
 	pushd $(PWD)/nostr-rs-relay && make build run && popd
 nostr-rs-relay-build:## 	pushd nostr-rs-relay-build && make && popd
 	@mkdir -p nostr-rs-relay/data
