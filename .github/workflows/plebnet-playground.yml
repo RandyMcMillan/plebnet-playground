@@ -69,7 +69,7 @@ jobs:
       - name: make venv && . .venv/bin/activate
         run: |
           make venv && . .venv/bin/activate
-          make test-venv
+          make venv-test
       - name: make build para=true
         run: |
           make build para=true

@@ -356,9 +356,8 @@ venv:## 	create python3 virtualenv .venv
 	@echo "try:"
 	@echo ". .venv/bin/activate"
 	@echo "or:"
-	@echo "make test-venv"
-##:	test-venv            source .venv/bin/activate; pip install -r requirements.txt;
-test-venv:## 	test virutalenv .venv
+	@echo "make venv-test"
+venv-test:## 	test virutalenv .venv
 	# insert test commands here
 	test -d .venv || $(PYTHON3) -m virtualenv .venv
 	( \
@@ -367,7 +366,7 @@ test-venv:## 	test virutalenv .venv
 .PHONY: init setup
 .SILENT:
 setup: init venv## 	basic setup
-init:## 	basic setup
+init:initialize submodules## 	initialize submodules
 
 ifneq ($(shell id -u),0)
 	@echo
