@@ -36,6 +36,11 @@ echo "$OSTYPE" | "$AWK" '{print tolower($0)}'
 
 arch_name="$(uname -m)"
 
+function apk-install() {
+
+echo
+
+}
 function apt-install() {
 
 if hash apt-get 2>/dev/null; then
@@ -156,6 +161,7 @@ if [[ "$OSTYPE" == "linux"* ]]; then
             apk add python3 py3-pip
             python3 -m pip install -r requirements.txt || \
             python3 -m pip install -r ../requirements.txt
+			apk-install
         fi
     fi
     if [[ "$OSTYPE" == "linux-arm"* ]]; then
@@ -164,7 +170,7 @@ if [[ "$OSTYPE" == "linux"* ]]; then
             echo 'Using apt...'
             apt install "$AWK"
             report
-			checkbrew
+			apt-install
         fi
     fi
 elif [[ "$OSTYPE" == *"arwin"* ]]; then
