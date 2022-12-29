@@ -511,13 +511,15 @@ submodules:## 	git submodule update --init --recursive
 	@git submodule update --init --recursive
 	#@install scripts/initialize nostr-rs-relay/scripts/initialize
 .PHONY: nostr-rs-relay
-nostr-rs-relay:nostr-rs-relay-build## 	pushd nostr-rs-relay && make build run && popd
-	pushd $(PWD)/nostr-rs-relay && make build run && popd
+nostr-rs-relay:nostr-rs-relay-init nostr-rs-relay-build## 	nostr-rs-relay-init/build/run
+	@pushd $(PWD)/nostr-rs-relay && make run && popd
+nostr-rs-relay-init:## 	pushd nostr-rs-relay && make init && popd
+	@pushd $(PWD)/nostr-rs-relay && make init && popd
 nostr-rs-relay-build:## 	pushd nostr-rs-relay-build && make init build && popd
 	@mkdir -p nostr-rs-relay/data
-	pushd $(PWD)/nostr-rs-relay && make init build && popd
+	@pushd $(PWD)/nostr-rs-relay && make init build && popd
 nostr-rs-relay-run:## 	pushd nostr-rs-relay-run && make && popd
-	pushd $(PWD)/nostr-rs-relay && make run && popd
+	@pushd $(PWD)/nostr-rs-relay && make run && popd
 #######################
 .PHONY: clean
 clean:## 	docker compose down --remove-orphans --rmi all
