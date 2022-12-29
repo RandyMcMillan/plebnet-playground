@@ -511,7 +511,7 @@ nuke-docker:## 	force reinstall of docker
 .PHONY: nostr-rs-relay
 nostr-rs-relay:nostr-rs-relay-build## 	pushd nostr-rs-relay && make build run && popd
 	pushd $(PWD)/nostr-rs-relay && make build run && popd
-nostr-rs-relay-build:## 	pushd nostr-rs-relay-build && make && popd
+nostr-rs-relay-build:## 	pushd nostr-rs-relay-build && make init build && popd
 	@mkdir -p nostr-rs-relay/data
 	pushd $(PWD)/nostr-rs-relay && make init build && popd
 nostr-rs-relay-run:## 	pushd nostr-rs-relay-run && make && popd
