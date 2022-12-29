@@ -86,9 +86,10 @@ if hash brew 2>/dev/null; then
     fi
     #brew install python@3.8
     if ! hash docker 2>/dev/null; then
+		echo
         #brew install --cask docker
         #brew install docker
-        brew install --overwrite docker
+        #brew install --overwrite docker
     fi
     if ! hash docker-compose 2>/dev/null; then
         brew install docker-compose
