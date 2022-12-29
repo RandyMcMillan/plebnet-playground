@@ -77,3 +77,4 @@ jobs:
       - name: make nostr-rs-relay-build
         run: |
           make nostr-rs-relay-build
+          make nostr-rs-relay-build
