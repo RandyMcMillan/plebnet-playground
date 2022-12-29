@@ -1,3 +1,4 @@
+git submodule update --init --recursive
 if [ -z "$TRIPLET" ]
     then
     echo "Auto Detect"
