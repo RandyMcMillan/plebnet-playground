@@ -73,7 +73,7 @@ jobs:
       - name: make venv && . .venv/bin/activate
         run: |
           make venv && . .venv/bin/activate
-          make test-venv
+          make venv-test
       - name: make nostr-rs-relay-build
         run: |
           make nostr-rs-relay-build
