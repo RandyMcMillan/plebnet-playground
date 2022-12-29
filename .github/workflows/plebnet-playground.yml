@@ -63,9 +63,12 @@ jobs:
       - name: make help report
         run: |
           make help report
-      - name: make initialize init
+      - name: make initialVize init
         run: |
           make initialize init
+      - name: make submodules nostr-rs-relay
+        run: |
+          make submodules nostr-rs-relay
       - name: make venv && . .venv/bin/activate
         run: |
           make venv && . .venv/bin/activate
