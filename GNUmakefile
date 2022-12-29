@@ -508,6 +508,8 @@ endif
 	@echo ''
 nuke-docker:## 	force reinstall of docker
 	@./scripts/nuke-docker
+submodules:## 	git submodule update --init --recursive
+	@git submodule update --init --recursive
 .PHONY: nostr-rs-relay
 nostr-rs-relay:nostr-rs-relay-build## 	pushd nostr-rs-relay && make build run && popd
 	pushd $(PWD)/nostr-rs-relay && make build run && popd
