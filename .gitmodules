@@ -3,3 +3,7 @@
 	url = https://github.com/PLEBNET-PLAYGROUND/playground-nostr-rs-relay.git
 	branch = master
 	ignore = dirty
+[submodule "nostr_console"]
+	path = nostr_console
+	url = https://github.com/PLEBNET-PLAYGROUND/nostr_console.git
+	ignore = dirty
