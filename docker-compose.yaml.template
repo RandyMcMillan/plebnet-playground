@@ -13,7 +13,7 @@ services:
     depends_on: 
     - tor
     restart: unless-stopped
-    container_name: playground-bitcoind
+    container_name: playground_bitcoind
     environment:
       TRIPLET: ${TRIPLET}
       GET_COINS_ON_STARTUP: 'true'
@@ -47,7 +47,7 @@ services:
       tlsextradomain: 'playground-lnd'
       rpchost: 'playground-bitcoind'
     restart: unless-stopped
-    container_name: playground-lnd
+    container_name: playground_lnd
     build: 
       context: ./lnd-signet
       dockerfile: Dockerfile
@@ -79,7 +79,7 @@ services:
       TOR_ADDR: 'playground-tor:9051'
       LIGHTNINGD_PORT: '9736'
     restart: unless-stopped
-    container_name: playground-cln
+    container_name: playground_cln
     build: 
       context: ./cln-signet
       dockerfile: Dockerfile
@@ -93,7 +93,7 @@ services:
         target: /root/.lightning/
   tor:
       restart: unless-stopped
-      container_name: playground-tor
+      container_name: playground_tor
       build:
         context: ./tor
         dockerfile: Dockerfile
@@ -111,7 +111,7 @@ services:
           source: ${oc.env:PWD}/volumes/tor_servicesdir
           target: /var/lib/tor/hidden_services
   thunderhub:
-    container_name: playground-thub
+    container_name: playground_thub
     depends_on: 
       - lnd
       - bitcoind
@@ -138,7 +138,7 @@ services:
     ports:
       - '3001:3000'  
   rtl:
-      container_name: playground-rtl
+      container_name: playground_rtl
       links:
         - lnd      
         - bitcoind 
@@ -173,7 +173,7 @@ services:
           source: ${oc.env:PWD}/volumes/rtl_datadir
           target: /data
   notebook:
-    container_name: playground-notebook
+    container_name: playground_notebook
     links: 
       - lnd
       - bitcoind
@@ -209,7 +209,7 @@ services:
       - -c
       - chmod +x /dashboard/jupyter_run.sh && /dashboard/jupyter_run.sh
   dashboard:
-    container_name: playground-dashboard
+    container_name: playground_dashboard
     links:
       - lnd
       - bitcoind
@@ -242,7 +242,7 @@ services:
       - dashboard.py
   lndg:  
     image: ghcr.io/cryptosharks131/lndg:latest  
-    container_name: playground-lndg
+    container_name: playground_lndg
     depends_on:  
       - lnd  
     volumes:  
@@ -260,7 +260,7 @@ services:
     depends_on: 
     - tor
     restart: unless-stopped
-    container_name: playground-docs
+    container_name: playground_docs
     environment:
       - TRIPLET=${TRIPLET}
     build: 
@@ -280,7 +280,7 @@ services:
   db:
     image: postgres:14.3
     restart: always
-    container_name: playground-postgres
+    container_name: playground_postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: myPassword
@@ -299,14 +299,14 @@ services:
     depends_on:
      - db
     image: adminer
-    container_name: playground-adminer
+    container_name: playground_adminer
     restart: always
     expose:
     - 8080
     ports:
     - 8890:8080
   lnbits:
-    container_name: playground-lnbits
+    container_name: playground_lnbits
     depends_on:
     - lnd
     - bitcoind
