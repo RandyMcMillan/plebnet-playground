@@ -354,7 +354,8 @@ export ORIGIN_DIR
 export TARGET_DIR
 
 .ONESHELL:
-all: initialize init install## 	all
+all: initialize init install prune-cluster## 	all
+	$(MAKE) cluster
 .PHONY: venv
 venv:## 	create python3 virtualenv .venv
 	test -d .venv || $(PYTHON3) -m virtualenv .venv
