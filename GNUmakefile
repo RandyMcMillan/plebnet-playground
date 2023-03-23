@@ -399,7 +399,7 @@ test-venv:## 	test virutalenv .venv
 .PHONY: init setup
 .SILENT:
 setup: init venv## 	basic setup
-init:submodules venv docker-pull
+init:submodules venv
 
 ifneq ($(shell id -u),0)
 	@echo
@@ -469,7 +469,7 @@ docker-pull:docker## 	docker-pull
 	docker pull ghcr.io/randymcmillan/plebnet-playground-docker/thunderhub-$(TRIPLET)/root:1679181974
 	docker pull ghcr.io/randymcmillan/plebnet-playground-docker/thunderhub-$(TRIPLET)/root:1679534824
 	docker pull rust:slim-buster
-	docker pull rust:latest
+	#docker pull rust:latest
 	docker pull alpine
 	docker pull ghcr.io/randymcmillan/plebnet-playground-docker/cln-$(TRIPLET)/root:1653883165
 	docker pull elementsproject/lightningd:v0.10.2
