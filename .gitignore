@@ -381,3 +381,4 @@ get-pip.py
 # don't check in virtualenv, usually named env or venv
 env
 venv
+.venv
