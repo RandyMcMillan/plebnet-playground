@@ -279,9 +279,7 @@ help:## 	print verbose help
 	@echo ''
 #	@echo '	 make shell            compiling environment on host machine'
 	@echo '	 make signin profile=gh-user     ~/GH_TOKEN.txt required from github.com'
-#	@echo '	 make header package-header'
 	@echo '	 make build'
-#	@echo '	 make build package-statoshi'
 	@echo '	 make package-all'
 	@echo ''
 	@echo '	 make install-python38-sh'
@@ -426,8 +424,10 @@ endif
 
 docker-install:
 	@echo "TODO: detect if macos arm64 or intel"
-	@echo "Install Docker.amd64.68347.dmg if MacOS Catalina - known compatible version!"
-	@curl -o Docker.amd64.68347.dmg  https://desktop.docker.com/mac/main/amd64/68347/Docker.dmg
+	@echo "Install Docker.amd64.93002.dmg if MacOS Catalina - known compatible version!"
+	@curl -o Docker.amd64.93002.dmg https://desktop.docker.com/mac/main/amd64/93002/Docker.dmg
+	@openssl dgst -sha256 Docker.amd64.93002.dmg
+	@echo "22eecb8ea07f10892d81cde07d614fb8b342163106133a75c4280a8e28787643"
 
 #######################
 .ONESHELL:
