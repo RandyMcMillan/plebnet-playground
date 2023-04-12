@@ -89,17 +89,17 @@ export PIP3
 PYTHON_VENV                             := $(shell python -c "import sys; sys.stdout.write('1') if hasattr(sys, 'base_prefix') else sys.stdout.write('0')")
 PYTHON3_VENV                            := $(shell python3 -c "import sys; sys.stdout.write('1') if hasattr(sys, 'real_prefix') else sys.stdout.write('0')")
 
-python_version_full := $(wordlist 2,4,$(subst ., ,$(shell python3 --version 2>&1)))
-python_version_major := $(word 1,${python_version_full})
-python_version_minor := $(word 2,${python_version_full})
-python_version_patch := $(word 3,${python_version_full})
+python_version_full                     := $(wordlist 2,4,$(subst ., ,$(shell python3 --version 2>&1)))
+python_version_major                    := $(word 1,${python_version_full})
+python_version_minor                    := $(word 2,${python_version_full})
+python_version_patch                    := $(word 3,${python_version_full})
 
-my_cmd.python.3 := $(PYTHON3) some_script.py3
-my_cmd := ${my_cmd.python.${python_version_major}}
+my_cmd.python.3                         := $(PYTHON3) some_script.py3
+my_cmd                                  := ${my_cmd.python.${python_version_major}}
 
-PYTHON_VERSION                         := ${python_version_major}.${python_version_minor}.${python_version_patch}
-PYTHON_VERSION_MAJOR                   := ${python_version_major}
-PYTHON_VERSION_MINOR                   := ${python_version_minor}
+PYTHON_VERSION                          := ${python_version_major}.${python_version_minor}.${python_version_patch}
+PYTHON_VERSION_MAJOR                    := ${python_version_major}
+PYTHON_VERSION_MINOR                    := ${python_version_minor}
 
 export python_version_major
 export python_version_minor
@@ -108,9 +108,9 @@ export PYTHON_VERSION
 
 #PROJECT_NAME defaults to name of the current directory.
 ifeq ($(project),)
-PROJECT_NAME							:= $(notdir $(PWD))
+PROJECT_NAME                            := $(notdir $(PWD))
 else
-PROJECT_NAME							:= $(project)
+PROJECT_NAME                            := $(project)
 endif
 export PROJECT_NAME
 
@@ -123,14 +123,14 @@ endif
 export TAG
 
 #GIT CONFIG
-GIT_USER_NAME							:= $(shell git config user.name)
+GIT_USER_NAME                           := $(shell git config user.name)
 export GIT_USER_NAME
-GIT_USER_EMAIL							:= $(shell git config user.email)
+GIT_USER_EMAIL                          := $(shell git config user.email)
 export GIT_USER_EMAIL
-GIT_SERVER								:= https://github.com
+GIT_SERVER                              := https://github.com
 export GIT_SERVER
 
-GIT_REPO_NAME							:= $(PROJECT_NAME)
+GIT_REPO_NAME                           := $(PROJECT_NAME)
 export GIT_REPO_NAME
 
 #Usage
@@ -138,42 +138,42 @@ export GIT_REPO_NAME
 #make package-all profile=asherp
 #note on GH_TOKEN.txt file below
 ifeq ($(profile),)
-GIT_PROFILE								:= $(GIT_USER_NAME)
+GIT_PROFILE                             := $(GIT_USER_NAME)
 ifeq ($(GIT_REPO_ORIGIN),git@github.com:PLEBNET_PLAYGROUND/plebnet-playground-docker.dev.git)
-GIT_PROFILE								:= PLEBNET-PLAYGROUND
+GIT_PROFILE                             := PLEBNET-PLAYGROUND
 endif
 ifeq ($(GIT_REPO_ORIGIN),https://github.com/PLEBNET_PLAYGROUND/plebnet-playground-docker.dev.git)
-GIT_PROFILE								:= PLEBNET-PLAYGROUND
+GIT_PROFILE                             := PLEBNET-PLAYGROUND
 endif
 else
-GIT_PROFILE								:= $(profile)
+GIT_PROFILE                             := $(profile)
 endif
 export GIT_PROFILE
 
-GIT_BRANCH								:= $(shell git rev-parse --abbrev-ref HEAD)
+GIT_BRANCH                              := $(shell git rev-parse --abbrev-ref HEAD)
 export GIT_BRANCH
-GIT_HASH								:= $(shell git rev-parse --short HEAD)
+GIT_HASH                                := $(shell git rev-parse --short HEAD)
 export GIT_HASH
-GIT_PREVIOUS_HASH						:= $(shell git rev-parse --short HEAD^1)
+GIT_PREVIOUS_HASH                       := $(shell git rev-parse --short HEAD^1)
 export GIT_PREVIOUS_HASH
-GIT_REPO_ORIGIN							:= $(shell git remote get-url origin)
+GIT_REPO_ORIGIN                         := $(shell git remote get-url origin)
 export GIT_REPO_ORIGIN
-GIT_REPO_PATH							:= $(HOME)/$(GIT_REPO_NAME)
+GIT_REPO_PATH                           := $(HOME)/$(GIT_REPO_NAME)
 export GIT_REPO_PATH
 
 ifneq ($(bitcoin-datadir),)
-BITCOIN_DATA_DIR						:= $(bitcoin-datadir)
+BITCOIN_DATA_DIR                        := $(bitcoin-datadir)
 else
-BITCOIN_DATA_DIR						:= $(HOME)/.bitcoin
+BITCOIN_DATA_DIR                        := $(HOME)/.bitcoin
 endif
 export BITCOIN_DATA_DIR
 
 ifeq ($(nocache),true)
-NOCACHE					     			:= --no-cache
+NOCACHE                                 := --no-cache
 #Force parallel build when --no-cache to speed up build
 PARALLEL                                := --parallel
 else
-NOCACHE						    		:=
+NOCACHE                                 :=
 PARALLEL                                :=
 endif
 ifeq ($(parallel),true)
@@ -186,38 +186,38 @@ export NOCACHE
 export PARALLEL
 
 ifeq ($(verbose),true)
-VERBOSE									:= --verbose
+VERBOSE                                 := --verbose
 else
-VERBOSE									:=
+VERBOSE                                 :=
 endif
 export VERBOSE
 
 #TODO more umbrel config testing
 ifeq ($(port),)
-PUBLIC_PORT								:= 80
+PUBLIC_PORT                             := 80
 else
-PUBLIC_PORT								:= $(port)
+PUBLIC_PORT                             := $(port)
 endif
 export PUBLIC_PORT
 
 ifeq ($(nodeport),)
-NODE_PORT								:= 8333
+NODE_PORT                               := 38333
 else
-NODE_PORT								:= $(nodeport)
+NODE_PORT                               := $(nodeport)
 endif
 export NODE_PORT
 
 ifneq ($(passwd),)
-PASSWORD								:= $(passwd)
+PASSWORD                                := $(passwd)
 else
-PASSWORD								:= changeme
+PASSWORD                                := changeme
 endif
 export PASSWORD
 
 ifeq ($(cmd),)
-CMD_ARGUMENTS							:=
+CMD_ARGUMENTS                           :=
 else
-CMD_ARGUMENTS							:= $(cmd)
+CMD_ARGUMENTS                           := $(cmd)
 endif
 export CMD_ARGUMENTS
 
@@ -309,8 +309,8 @@ help:## 	print verbose help
 	@echo ''
 	@echo '	make init && play help'
 	@echo ''
-	@sed -n 's/^# //p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/# /'
-	@sed -n 's/^## //p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/## /'
+	@sed -n 's/^# //p'   ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/# /'
+	@sed -n 's/^## //p'  ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/## /'
 	@sed -n 's/^### //p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/### /'
 
 .PHONY: report
@@ -357,9 +357,10 @@ report:## 	print environment arguments
 	@echo '        - GIT_REPO_NAME=${GIT_REPO_NAME}'
 	@echo '        - GIT_REPO_PATH=${GIT_REPO_PATH}'
 	@echo '        - NOCACHE=${NOCACHE}'
-	# @echo '        - VERBOSE=${VERBOSE}'
-	# @echo '        - PASSWORD=${PASSWORD}'
-	# @echo '        - CMD_ARGUMENTS=${CMD_ARGUMENTS}'
+	@echo ''
+	@echo '        - VERBOSE=${VERBOSE}'
+	@echo '        - PASSWORD=${PASSWORD}'
+	@echo '        - CMD_ARGUMENTS=${CMD_ARGUMENTS}'
 
 #######################
 
