@@ -381,3 +381,6 @@ get-pip.py
 # don't check in virtualenv, usually named env or venv
 env
 venv
+
+# ignore make docker-install artifact
+Docker.amd64.93002.dmg
