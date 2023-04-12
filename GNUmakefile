@@ -424,11 +424,12 @@ endif
 	#pushd scripts 2>/dev/null; for string in *; do sudo chmod -R o+rwx /usr/local/bin/$$string; done; popd  2>/dev/null || echo
 
 docker-install:## 	install Docker.app for MacOS Catalina (Intel)
+	@sudo -S chown -R $(shell whoami):admin /Users/$(shell whoami)/.docker/buildx/current
 	@echo "TODO: detect if macos arm64 or intel"
 	@echo "Install Docker.amd64.93002.dmg if MacOS Catalina - known compatible version!"
 	@curl -o Docker.amd64.93002.dmg https://desktop.docker.com/mac/main/amd64/93002/Docker.dmg
 	@openssl dgst -sha256 Docker.amd64.93002.dmg
-	@echo "22eecb8ea07f10892d81cde07d614fb8b342163106133a75c4280a8e28787643"
+	@echo "bee41d646916e579b16b7fae014e2fb5e5e7b5dbaf7c1949821fd311d3ce430b"
 
 #######################
 .ONESHELL:
