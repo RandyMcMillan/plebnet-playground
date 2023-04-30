@@ -1,7 +1,7 @@
 [submodule "rs-relay"]
 	path = nostr/rs-relay
 	url = https://github.com/PLEBNET-PLAYGROUND/playground-nostr-rs-relay.git
-	branch = v0.0.4
+	branch = v0.0.5
 	ignore = dirty
 [submodule "cluster"]
 	path = cluster
