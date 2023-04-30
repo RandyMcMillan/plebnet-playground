@@ -424,8 +424,18 @@ endif
 	#pushd scripts 2>/dev/null; for string in *; do sudo chmod -R o+rwx /usr/local/bin/$$string; done; popd  2>/dev/null || echo
 
 docker-install:## 	install Docker.app for MacOS Catalina (Intel)
-	@sudo -S chown -R $(shell whoami):admin /Users/$(shell whoami)/.docker/buildx/current
-	@echo "TODO: detect if macos arm64 or intel"
+
+	@[[ '$(shell uname -s)' == 'Darwin' ]] && echo "is Darwin" || echo "not Darwin";
+	@[[ '$(shell uname -m)' == 'x86_64' ]] && echo "is x86_64" || echo "not x86_64";
+	@[[ '$(shell uname -p)' == 'i386' ]]   && echo "is i386" || echo "not i386";
+	@[[ '$(shell uname -s)' == 'Darwin' ]] && [[ '$(shell uname -m)' == 'x86_64' ]]   && echo "is Darwin AND x86_64"     || echo "not Darwin AND x86_64";
+	@[[ '$(shell uname -s)' == 'Darwin' ]] && [[ ! '$(shell uname -m)' == 'x86_64' ]] && echo "is Darwin AND NOT x86_64" || echo "is NOT (Darwin AND NOT x86_64)";
+
+	#@[[ '$(shell uname -s)' != 'Darwin' ]] && echo "not Darwin" || echo "is Darwin";
+	#@[[ '$(shell uname -m)' != 'x86_64' ]] && echo "not x86_64" || echo "is x86_64";
+	#@[[ '$(shell uname -p)' != 'i386' ]]   && echo "not i386" || echo "is i386";
+
+	@[[ '$(shell uname -s)' == 'Darwin'* ]] && sudo -S chown -R $(shell whoami):admin /Users/$(shell whoami)/.docker/buildx/current
 	@echo "Install Docker.amd64.93002.dmg if MacOS Catalina - known compatible version!"
 	@curl -o Docker.amd64.93002.dmg https://desktop.docker.com/mac/main/amd64/93002/Docker.dmg
 	@openssl dgst -sha256 Docker.amd64.93002.dmg
