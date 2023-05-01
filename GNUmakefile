@@ -504,18 +504,27 @@ docker-pull:docker-start signin## 	docker-pull
 		echo "is Darwin AND NOT x86_64" || \
 		echo "is NOT (Darwin AND NOT x86_64)";
 
-	docker pull alpine
-	docker pull rust:latest
-	docker pull debian:sid-slim
-	docker pull rust:slim-buster
-	docker pull shahanafarooqui/rtl:0.13.6
-	docker pull elementsproject/lightningd:latest
+	#docker pull alpine
+	#docker pull rust:latest
+	#docker pull debian:sid-slim
+	#docker pull rust:slim-buster
+	#docker pull shahanafarooqui/rtl:0.13.6
+	#docker pull elementsproject/lightningd:v22.11.1
 
-	docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/lnd-$(TRIPLET)/root:$(TAG)
-	docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/tor-$(TRIPLET)/root:$(TAG)
-	docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/docs-$(TRIPLET)/root:$(TAG)
-	docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/thunderhub-$(TRIPLET)/root:$(TAG)
-	docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/bitcoind-$(TRIPLET)/root:$(TAG)
+	#docker pull ghcr.io/randymcmillan/plebnet-playground-docker/bitcoind-x86_64-linux-gnu/root:v0.5.11
+	#docker pull ghcr.io/randymcmillan/plebnet-playground-docker/bitcoind-x86_64-linux-gnu/root:v0.5.12
+	
+	@echo $(PACKAGE_PREFIX)
+	@echo $(GIT_PROFILE)
+	@echo $(PROJECT_NAME)
+	@echo $(TRIPLET)
+	@echo $(TAG)
+
+	#docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/lnd-$(TRIPLET)/root:$(TAG)
+	#docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/tor-$(TRIPLET)/root:$(TAG)
+	#docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/docs-$(TRIPLET)/root:$(TAG)
+	#docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/thunderhub-$(TRIPLET)/root:$(TAG)
+	#docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/bitcoind-$(TRIPLET)/root:$(TAG)
 
 .PHONY: blocknotify
 blocknotify:
