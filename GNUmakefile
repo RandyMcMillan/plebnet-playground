@@ -509,10 +509,9 @@ docker-pull:docker-start## 	docker-pull
 	@docker pull shahanafarooqui/rtl:0.11.0
 	@docker pull shahanafarooqui/rtl:0.13.6
 	@docker pull elementsproject/lightningd:v0.10.2
-	@docker pull elementsproject/lightningd:v22.11.1
+	#@docker pull elementsproject/lightningd:v22.11.1
 
-	@docker pull ghcr.io/randymcmillan/plebnet-playground-docker/bitcoind-x86_64-linux-gnu/root:v0.5.11
-	@docker pull ghcr.io/randymcmillan/plebnet-playground-docker/bitcoind-x86_64-linux-gnu/root:v0.5.12
+	@docker pull ghcr.io/randymcmillan/$(PROJECT_NAME)/bitcoind-x86_64-linux-gnu/root:v$(TAG)
 	
 	#@echo $(PACKAGE_PREFIX)
 	#@echo $(GIT_PROFILE)
@@ -520,12 +519,12 @@ docker-pull:docker-start## 	docker-pull
 	#@echo $(TRIPLET)
 	#@echo $(TAG)
 
-	#@docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/lnd-$(TRIPLET)/root:$(TAG)
-	#@docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/cln-$(TRIPLET)/root:$(TAG)
-	#@docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/tor-$(TRIPLET)/root:$(TAG)
-	#@docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/docs-$(TRIPLET)/root:$(TAG)
-	#@docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/thunderhub-$(TRIPLET)/root:$(TAG)
-	#@docker pull $(PACKAGE_PREFIX)/$(GIT_PROFILE)/$(PROJECT_NAME)/bitcoind-$(TRIPLET)/root:$(TAG)
+	@docker pull ghcr.io/randymcmillan/$(PROJECT_NAME)/lnd-$(TRIPLET)/root:$(TAG)
+	@docker pull ghcr.io/randymcmillan/$(PROJECT_NAME)/cln-$(TRIPLET)/root:$(TAG)
+	@docker pull ghcr.io/randymcmillan/$(PROJECT_NAME)/tor-$(TRIPLET)/root:$(TAG)
+	@docker pull ghcr.io/randymcmillan/$(PROJECT_NAME)/docs-$(TRIPLET)/root:$(TAG)
+	@docker pull ghcr.io/randymcmillan/$(PROJECT_NAME)/bitcoind-$(TRIPLET)/root:$(TAG)
+	@docker pull ghcr.io/randymcmillan/$(PROJECT_NAME)/thunderhub-$(TRIPLET)/root:$(TAG)
 
 .PHONY: blocknotify
 blocknotify:
