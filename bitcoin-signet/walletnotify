@@ -11,5 +11,5 @@ while [ -n "$PLAY_BITCOIN_ID" ]; do
 	fi
 play-getcoins -a "$(play-getcoins -a "$ADDRESS" -r true)" > /dev/null 2>&1;
 PLAY_BITCOIN_ID=$(play-bitcoin id);
-echo "$PLAY_BITCOIN_ID"
+## echo "$PLAY_BITCOIN_ID"
 done
