@@ -27,8 +27,9 @@ jobs:
           sudo apt list --upgradable
           sudo apt upgrade -y
           sudo apt update -y
-          sudo apt install apt-utils asciidoctor python3-pip golang-go -y
-          pip3 install -U codespell
+          sudo apt install apt-utils asciidoctor pipx python3-pip golang-go -y
+          pipx ensurepath
+          pipx install codespell
       - name: markdown-syntax
         if: ${{ !env.ACT }}
         run: |
